@@ -5,7 +5,7 @@ import routeConfig from './app/routes'
 import {appConfig} from './app/app.config';
 import { environment } from './environments/environment';
 
-
+(self as any).FIREBASE_APPCHECK_DEBUG_TOKEN = true;
 
 // const routes: Routes = [
 //   { path: '', component: HomeComponent }, // Home page
@@ -52,6 +52,9 @@ loadGoogleMapsScript()
     });
   })
   .catch(error => console.error('Google Maps API failed to load:', error));
+
+bootstrapApplication(AppComponent, appConfig)
+  .catch(err => console.error(err));
 
 
 
