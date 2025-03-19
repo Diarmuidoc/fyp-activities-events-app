@@ -1,0 +1,39 @@
+<div class="content">
+<!--<div class="form-container mat-elevation-z5">-->
+<!--  <h1>Login</h1>-->
+<!--  <form [formGroup]="loginForm" (ngSubmit)="submit()">-->
+<!--    <mat-form-field>-->
+<!--      <input matInput placeholder="Email address" formControlName="email" />-->
+<!--    </mat-form-field>-->
+<!--    <mat-form-field>-->
+<!--      <input matInput placeholder="Password" formControlName="password" type="password" />-->
+<!--    </mat-form-field>-->
+<!--    <div class="center margin-top">-->
+<!--      <button mat-raised-button color="primary" type="submit">-->
+<!--        Login-->
+<!--      </button>-->
+<!--    </div>-->
+<!--    <span class="margin-top center">Don't have an account? <a routerLink="user-sign-up">Sign Up</a></span>-->
+<!--  </form>-->
+<!--</div>-->
+
+  <div class="form-container mat-elevation-z5">
+    <h1>Login</h1>
+
+    @if(errorMessage){
+      <div>{{errorMessage}}</div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <mat-form-field>
+        <input matInput type="text" placeholder="Email" formControlName="email" />
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="password" placeholder="Password" formControlName="password" />
+      </mat-form-field>
+      <div class="center margin-top">
+        <button mat-raised-button type="submit">Sign In</button>
+      </div>
+    </form>
+  </div>
+</div>
