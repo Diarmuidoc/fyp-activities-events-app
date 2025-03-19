@@ -1,0 +1,23 @@
+<div class="content">
+  <h1>Welcome to the Events Page</h1>
+  <p>Lots of events</p>
+
+  <section>
+    <div class="card-container">
+      <mat-card class="event-card" *ngFor="let event of events">
+        <mat-card-header>
+          <mat-card-title>{{ event.title }}</mat-card-title>
+        </mat-card-header>
+        <img mat-card-image [src]="event.image" alt="Event image">
+        <mat-card-content>
+          <p>{{ event.description }}</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <a [routerLink]="['event-details', events]">
+            <button mat-button>Learn More</button>
+          </a>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </section>
+</div>

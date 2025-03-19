@@ -30,8 +30,15 @@
     <ul>
       <li><a routerLink="/">Home</a></li>
       <li><a routerLink="/event">Event</a></li>
-      <li><a routerLink="/user-sign-up">Sign Up</a></li>
-      <li><a routerLink="/user-login">Login</a></li>
+
+      @if (authService.currentUserSig() == null){
+        <li><a routerLink="/user-sign-up">Sign Up</a></li>
+        <li><a routerLink="/user-login">Login</a></li>
+      }
+
+      @if (authService.currentUserSig()){
+        <li><a (click)="logout()">Logout</a></li>
+      }
     </ul>
   </nav>
 
