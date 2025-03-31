@@ -29,6 +29,7 @@
   <nav>
     <ul>
       <li><a routerLink="/">Home</a></li>
+      <li><a routerLink="/activity">Activity</a></li>
       <li><a routerLink="/event">Event</a></li>
 
       @if (authService.currentUserSig() == null){
@@ -37,7 +38,11 @@
       }
 
       @if (authService.currentUserSig()){
-        <li><a (click)="logout()">Logout</a></li>
+        <div class="right-item">
+          <li><p>{{ userDisplayName }}</p></li>
+          <li><a (click)="logout()">Logout</a></li>
+        </div>
+
       }
     </ul>
   </nav>
