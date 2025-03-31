@@ -26,6 +26,10 @@ export class AuthenticationService {
     return from(promise)
   }
 
+  constructor(private auth: Auth) {
+    this.user$ = user(auth); // Observes the authenticated user
+  }
+
   login(email: string, password: string): Observable<void>{
     const promise = signInWithEmailAndPassword(this.firebaseAuth, email, password).then(() => {});
     return from(promise);

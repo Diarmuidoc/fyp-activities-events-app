@@ -3,15 +3,9 @@ import { provideRouter, Routes } from '@angular/router';
 import { AppComponent } from './app/app.component';
 import routeConfig from './app/routes'
 import {appConfig} from './app/app.config';
-import { environment } from './environments/environment';
+import {provideHttpClient} from '@angular/common/http';
 
 (self as any).FIREBASE_APPCHECK_DEBUG_TOKEN = true;
-
-// const routes: Routes = [
-//   { path: '', component: HomeComponent }, // Home page
-//   { path: 'event', component: EventComponent },
-//   { path: '**', redirectTo: '' } // Redirect unknown routes
-// ];
 
 // Function to load Google Maps API script dynamically
 function loadGoogleMapsScript(): Promise<void> {
@@ -57,7 +51,10 @@ bootstrapApplication(AppComponent, appConfig)
   .catch(err => console.error(err));
 
 
-
+// Can Both of these exist together
+bootstrapApplication(AppComponent, {
+  providers: [provideHttpClient()]
+}).catch(err => console.error(err));
 
 
 

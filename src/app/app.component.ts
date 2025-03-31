@@ -4,6 +4,7 @@ import {AuthenticationService} from './services/authentication.service';
 
 
 
+
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, RouterLink],
@@ -13,6 +14,7 @@ import {AuthenticationService} from './services/authentication.service';
 export class AppComponent implements AfterViewInit, OnInit {
   authService = inject(AuthenticationService)
   map!: google.maps.Map;
+  userDisplayName: string = 'User';
 
   ngOnInit(): void{
     this.authService.user$.subscribe(user => {
@@ -30,6 +32,12 @@ export class AppComponent implements AfterViewInit, OnInit {
 
   logout(): void {
     this.authService.logout();
+  }
+
+  constructor() {
+    this.authService.user$.subscribe(user => {
+      this.userDisplayName = user?.displayName || 'User';
+    });
   }
 
   ngAfterViewInit() {
