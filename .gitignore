@@ -50,5 +50,5 @@ Thumbs.db
 # Angular Environment
 src/environments/environment.ts
 /environment.ts
-environment.ts
+environment.tsn
 .env
