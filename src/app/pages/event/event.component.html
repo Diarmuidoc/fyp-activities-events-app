@@ -1,23 +1,62 @@
 <div class="content">
-  <h1>Welcome to the Events Page</h1>
-  <p>Lots of events</p>
+  <h2>Upcoming Events in {{ locationCity }}</h2>
 
-  <section>
-    <div class="card-container">
-      <mat-card class="event-card" *ngFor="let event of events">
+  <div *ngIf="isLoading">
+    <p>Loading events...</p>
+  </div>
+
+  <div *ngIf="error">
+    <p style="color: red;">{{ error }}</p>
+  </div>
+
+  <div *ngIf="!isLoading && !error">
+    <p *ngIf="events.length === 0">No upcoming events found for this location.</p>
+
+    <div class="event-list" *ngIf="events.length > 0">
+      <mat-card *ngFor="let event of events" class="event-card">
         <mat-card-header>
-          <mat-card-title>{{ event.title }}</mat-card-title>
+          <mat-card-title>{{ event.name }}</mat-card-title>
+          <mat-card-subtitle>
+            {{ getVenueName(event) }} | {{ getEventDate(event) }} at {{ getEventTime(event) }}
+          </mat-card-subtitle>
         </mat-card-header>
-        <img mat-card-image [src]="event.image" alt="Event image">
+        <img mat-card-image [src]="getEventImageUrl(event)" [alt]="event.name">
         <mat-card-content>
-          <p>{{ event.description }}</p>
         </mat-card-content>
         <mat-card-actions>
-          <a [routerLink]="['event-details', events]">
-            <button mat-button>Learn More</button>
-          </a>
+          <a mat-button [href]="event.url" target="_blank" rel="noopener noreferrer">View on Ticketmaster</a>
         </mat-card-actions>
       </mat-card>
     </div>
-  </section>
+  </div>
+
+
+
+
+
+
+
+
+
+  <!--  <h1>Welcome to the Events Page</h1>-->
+<!--  <p>Lots of events</p>-->
+
+<!--  <section>-->
+<!--    <div class="card-container">-->
+<!--      <mat-card class="event-card" *ngFor="let event of events">-->
+<!--        <mat-card-header>-->
+<!--          <mat-card-title>{{ event.title }}</mat-card-title>-->
+<!--        </mat-card-header>-->
+<!--        <img mat-card-image [src]="event.image" alt="Event image">-->
+<!--        <mat-card-content>-->
+<!--          <p>{{ event.description }}</p>-->
+<!--        </mat-card-content>-->
+<!--        <mat-card-actions>-->
+<!--          <a [routerLink]="['event-details', events]">-->
+<!--            <button mat-button>Learn More</button>-->
+<!--          </a>-->
+<!--        </mat-card-actions>-->
+<!--      </mat-card>-->
+<!--    </div>-->
+<!--  </section>-->
 </div>

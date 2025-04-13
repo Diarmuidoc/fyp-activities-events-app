@@ -16,3 +16,20 @@
 .event-card {
   width: 300px;
 }
+
+.event-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive grid */
+  gap: 16px; /* Spacing between cards */
+  padding: 16px;
+}
+
+.event-card {
+  max-width: 400px; /* Max width for cards */
+}
+
+/* Ensure images don't distort aspect ratio */
+mat-card-image {
+  aspect-ratio: 16 / 9; /* Common aspect ratio for event images */
+  object-fit: cover; /* Cover the area without stretching */
+}
