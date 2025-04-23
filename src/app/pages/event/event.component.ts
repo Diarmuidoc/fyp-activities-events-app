@@ -102,6 +102,43 @@ export class EventComponent implements OnInit { // Implement OnInit
     });
   }
 
+  /**
+   * Fetches events from the Ticketmaster API based on latitude and longitude.
+   * @param latitude The latitude of the location.
+   * @param longitude The longitude of the location.
+   */
+  fetchEventsByCoordinates(latitude: number, longitude: number): void {
+    const apiKey = environment.ticketmasterKey;
+    const url = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=${apiKey}&latlong=${latitude},${longitude}&radius=50&unit=km&sort=date,asc`; // Example: within 50km
+
+    console.log('Fetching events from coordinates:', url);
+
+    this.isLoading = true;
+    this.error = null;
+
+    this.http.get<TicketmasterResponse>(url).subscribe({
+      next: (response) => {
+        if (response && response._embedded && response._embedded.events) {
+          this.events = response._embedded.events;
+          console.log('Events received:', this.events);
+        } else {
+          this.events = [];
+          console.log('No events found or unexpected response structure.');
+        }
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error fetching events:', err);
+        this.error = 'Failed to fetch events. Please try again later.';
+        this.isLoading = false;
+        this.events = [];
+      },
+      complete: () => {
+        console.log('Event fetching completed.');
+      },
+    });
+  }
+
   // Helper function to get the primary image URL safely
   getEventImageUrl(event: TicketmasterEvent): string {
     // Find the image with the best aspect ratio or the first one

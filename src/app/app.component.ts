@@ -74,6 +74,29 @@ export class AppComponent implements AfterViewInit, OnInit {
       zoom: 10
     });
   }
+
+
+  getCurrentLocation(): Promise<{ latitude: number; longitude: number } | null> {
+    return new Promise((resolve, reject) => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            resolve({
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            });
+          },
+          (error) => {
+            console.error('Error getting location:', error);
+            reject(null); // Or handle the error more specifically
+          }
+        );
+      } else {
+        console.error('Geolocation is not supported by this browser.');
+        reject(null);
+      }
+    });
+  }
 }
 
 

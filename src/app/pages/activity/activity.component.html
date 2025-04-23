@@ -10,17 +10,23 @@
   </div>
 
   <div *ngIf="!isLoading && !errorMessage && places.length > 0" class="places-container">
-    <div *ngFor="let place of places" class="card">
-
-      <img *ngIf="place.photos && place.photos.length > 0"
-           [src]="getPhotoUrl(place.photos[0].photo_reference)"
-           alt="Image of {{ place.name }}" /> <div *ngIf="!place.photos || place.photos.length === 0" class="no-image-placeholder">
-      No Image Available
-    </div>
+    <div *ngFor="let place of places"
+         class="card"
+         [routerLink]="['/activity', place.place_id]"
+         style="cursor: pointer;" title="View details for {{ place.name }}"> <img *ngIf="place.photos && place.photos.length > 0"
+                                                                                  [src]="place.imageUrl"
+                                                                                  alt="Image of {{ place.name }}" />
+      <div *ngIf="!place.photos || place.photos.length === 0" class="no-image-placeholder">
+        No Image Available
+      </div>
 
       <h3>{{ place.name }}</h3>
-      <p>{{ place.vicinity || 'Address not available' }}</p> <p>Rating: ⭐ {{ place.rating ? place.rating : 'N/A' }}</p> </div>
+      <p>{{ place.vicinity || 'Address not available' }}</p>
+      <p>Rating: ⭐ {{ place.rating ? place.rating : 'N/A' }}</p>
+
+    </div>
   </div>
+
 
   <div *ngIf="!isLoading && !errorMessage && places.length === 0" class="no-results">
     No activities found nearby. Try adjusting search criteria or location.

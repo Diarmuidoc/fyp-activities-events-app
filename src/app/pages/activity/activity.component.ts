@@ -1,94 +1,117 @@
-import { Component, OnInit } from '@angular/core';
-import {CommonModule, NgIf} from '@angular/common';
-import {NgForOf} from '@angular/common';
-import {GooglePlacesService} from '../../services/google-places.service';
-import {environment} from '../../../environments/environment';
-
-
+import { Component, OnInit, OnDestroy } from '@angular/core'; // Import OnDestroy
+import { CommonModule, NgIf, NgForOf } from '@angular/common'; // Keep CommonModule or NgIf/NgForOf based on Angular version/setup
+import { GooglePlacesService } from '../../services/google-places.service'; // Correct path to your service
+// environment is no longer needed here for the API key
+// import { environment } from '../../../environments/environment';
+import { RouterLink } from '@angular/router';
+import { Subscription } from 'rxjs'; // Import Subscription
 
 @Component({
   selector: 'app-activity',
   standalone: true,
   imports: [
-    NgForOf,
-    NgIf,
-    CommonModule,
+    CommonModule, // Includes NgIf, NgForOf etc.
+    RouterLink,
   ],
   templateUrl: './activity.component.html',
   styleUrl: './activity.component.css'
 })
-
-export class ActivityComponent implements OnInit {
+export class ActivityComponent implements OnInit, OnDestroy { // Implement OnDestroy
   places: any[] = [];
   isLoading: boolean = false;
   errorMessage: string | null = null;
+  private placesSubscription: Subscription | null = null; // To hold the subscription
 
-  //Move to backend
-  private apiKey = environment.googleMapsApiKey;
-
+  // API Key is no longer needed here - remove constructor logic related to it
   constructor(private googlePlacesService: GooglePlacesService) {
-    if (!this.apiKey) {
-      console.error("ERROR: Google Places API Key is not configured in environment variables!");
-      this.errorMessage = "Application configuration error. API key is missing.";
-    }
+    // Constructor is now simpler, just injects the service
+    console.log("ActivityComponent initialized");
   }
 
   ngOnInit(): void {
-    if (this.apiKey) {
-      this.fetchActivities();
-    }
+    // Call fetchActivities directly on init
+    this.fetchActivities();
   }
 
+  ngOnDestroy(): void {
+    // Unsubscribe when the component is destroyed
+    if (this.placesSubscription) {
+      this.placesSubscription.unsubscribe();
+      console.log("Unsubscribed from places observable.");
+    }
+  }
 
   fetchActivities(): void {
     this.isLoading = true;
     this.errorMessage = null;
     this.places = []; // Clear previous results
 
-    this.googlePlacesService.getPlacesNearby(5000, 'tourist_attraction')
+    console.log("Calling getPlacesNearby service method..."); // Log before calling
+
+    // Store the subscription so we can unsubscribe later
+    this.placesSubscription = this.googlePlacesService.getPlacesNearby(10000, 'tourist_attraction') // 10km radius, tourist attractions
       .subscribe({
-        // Use 'any' for the data type since no interface is defined
+        // Type is 'any' as requested
         next: (data: any) => {
-          console.log('Received places data:', data); // For debugging
-          // Ensure data.results exists and is an array before assigning
-          this.places = data && data.results && Array.isArray(data.results) ? data.results : [];
+          console.log('[ActivityComponent] Received data from service:', data);
+          // **Important Check**: The actual places are usually in a 'results' array from Google Places API response
+          if (data && data.results && Array.isArray(data.results)) {
+            this.places = data.results;
+            console.log(`Assigned ${this.places.length} places.`);
+            if (this.places.length === 0) {
+              console.log("Received zero results from API.");
+              // Optional: Set a message if needed, though errorMessage is usually for errors
+              // this.errorMessage = "No nearby attractions found.";
+            }
+          } else if (data && data.status === 'ZERO_RESULTS') {
+            this.places = []; // Ensure places is empty array
+            console.log("Received ZERO_RESULTS status from API.");
+            // Optional: Set a message
+            // this.errorMessage = "No nearby attractions found.";
+          }
+          else {
+            // Handle unexpected data structure
+            console.warn('[ActivityComponent] Unexpected data structure received:', data);
+            this.places = [];
+            this.errorMessage = 'Received unexpected data format from the server.';
+          }
           this.isLoading = false;
         },
-        error: (error) => {
-          console.error('Error fetching places in component:', error);
-          // Provide a user-friendly error message
-          this.errorMessage = 'Failed to load activities. Please try again later.';
-          if (error.status === 0) {
-            this.errorMessage = 'Network error. Please check your connection.';
-          } else if (error.error && typeof error.error.message === 'string') {
-            // Use specific error from backend if available
-            this.errorMessage = error.error.message;
-          }
+        error: (error: Error) => { // Expecting an Error object now based on service refinement
+          console.error('[ActivityComponent] Error fetching places:', error);
+          // Use the error message generated by the service
+          this.errorMessage = error.message || 'Failed to load activities due to an unknown error.';
+          this.isLoading = false;
+          this.places = []; // Clear places on error
+        },
+        complete: () => {
+          // Optional: Code here runs only if the observable completes successfully *without* erroring.
+          console.log("[ActivityComponent] Places observable completed.");
+          // isLoading should already be false from 'next', but can be set here too for safety
           this.isLoading = false;
         }
       });
   }
 
-
-  getPhotoUrl(photoReference: string): string {
-    const maxWidth = 400; // Or make this configurable
-    // --- Construct the URL safely using the API key from environment ---
-    // Ensure the photoReference is actually a string before using it
-    if (typeof photoReference !== 'string' || !this.apiKey) {
-      console.warn('Invalid photoReference or missing API key for getPhotoUrl');
-      // Return a placeholder or empty string to prevent errors
-      return ''; // Or path to a local placeholder image asset
-    }
-    return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=${maxWidth}&photoreference=${photoReference}&key=${this.apiKey}`;
+  // Function to potentially retry fetching
+  retryFetch(): void {
+    console.log("Retrying fetch activities...");
+    this.fetchActivities();
   }
 
-  //Used in different version
+  // REMOVED: getPhotoUrl - This logic should not use the API key directly in the component.
+  // If you need photos, consider:
+  // 1. Having the proxy return full photo URLs (requires proxy modification).
+  // 2. Having the service create a URL *without* the key (may not work depending on Google's requirements).
+  // 3. Using Place IDs with the Maps Embed API or JS SDK in your template if applicable.
+
+  // REMOVED: onImageError - Keep this if your template still tries to load images and you want fallback logic.
+  // Otherwise, it can be removed if you remove image tags for now.
   onImageError(event: Event): void {
-    const failedImageUrl = (event.target as HTMLImageElement)?.src;
-    console.warn('Image failed to load:', failedImageUrl);
-    // Optional: Hide the broken image or replace its src with a placeholder
-    // (event.target as HTMLImageElement).style.display = 'none';
-    // (event.target as HTMLImageElement).src = 'path/to/your/placeholder.png';
+    const target = event.target as HTMLImageElement;
+    console.warn('Image failed to load:', target?.src);
+    // Example: Hide broken image icon or show placeholder
+    target.style.display = 'none'; // Simple hide
+    // target.src = 'assets/images/placeholder.png'; // Replace with placeholder
   }
-
 }

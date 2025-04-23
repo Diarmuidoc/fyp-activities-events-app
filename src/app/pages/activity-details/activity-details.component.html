@@ -1,0 +1,46 @@
+<div class="details-container">
+  <div *ngIf="isLoading" class="loading">Loading details...</div>
+
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+  <div *ngIf="!isLoading && !errorMessage && placeDetails" class="details-content">
+    <h2>{{ placeDetails.name }}</h2>
+
+    <div *ngIf="placeDetails.photos && placeDetails.photos.length > 0" class="photos-gallery">
+      <img *ngFor="let photo of placeDetails.photos.slice(0, 5)" [src]="getPhotoUrl(photo.photo_reference)"
+           alt="Photo of {{ placeDetails.name }}">
+    </div>
+
+    <p><strong>Address:</strong> {{ placeDetails.formatted_address || placeDetails.vicinity || 'Not available' }}</p>
+    <p><strong>Rating:</strong> ⭐ {{ placeDetails.rating ? placeDetails.rating + ' (' + placeDetails.user_ratings_total + ' reviews)' : 'N/A' }}</p>
+    <p><strong>Phone:</strong> {{ placeDetails.formatted_phone_number || 'Not available' }}</p>
+    <p><strong>Website:</strong>
+      <a *ngIf="placeDetails.website" [href]="placeDetails.website" target="_blank" rel="noopener noreferrer">{{ placeDetails.website }}</a>
+      <span *ngIf="!placeDetails.website">Not available</span>
+    </p>
+
+    <div *ngIf="placeDetails.opening_hours">
+      <h3>Opening Hours</h3>
+      <ul *ngIf="placeDetails.opening_hours.weekday_text">
+        <li *ngFor="let day of placeDetails.opening_hours.weekday_text">{{ day }}</li>
+      </ul>
+      <p *ngIf="placeDetails.opening_hours.open_now !== undefined">
+        Currently: {{ placeDetails.opening_hours.open_now ? 'Open' : 'Closed' }}
+      </p>
+    </div>
+
+    <div *ngIf="placeDetails.reviews && placeDetails.reviews.length > 0">
+      <h3>Reviews</h3>
+      <div *ngFor="let review of placeDetails.reviews" class="review">
+        <p><strong>{{ review.author_name }}</strong> (Rating: {{ review.rating }}/5)</p>
+        <p>{{ review.text }}</p>
+        <small>{{ review.relative_time_description }}</small>
+      </div>
+    </div>
+
+    <a routerLink="/activities">Back to Activities List</a> </div>
+
+  <div *ngIf="!isLoading && !errorMessage && !placeDetails">
+    Could not find details for this activity.
+  </div>
+</div>
