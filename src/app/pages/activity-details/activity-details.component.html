@@ -1,46 +1,64 @@
 <div class="details-container">
-  <div *ngIf="isLoading" class="loading">Loading details...</div>
+  <h2>Activity Details</h2>
 
-  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+<!--  <div *ngIf="isLoading" class="loading">-->
+<!--    Loading details...-->
+<!--  </div>-->
 
-  <div *ngIf="!isLoading && !errorMessage && placeDetails" class="details-content">
-    <h2>{{ placeDetails.name }}</h2>
-
-    <div *ngIf="placeDetails.photos && placeDetails.photos.length > 0" class="photos-gallery">
-      <img *ngFor="let photo of placeDetails.photos.slice(0, 5)" [src]="getPhotoUrl(photo.photo_reference)"
-           alt="Photo of {{ placeDetails.name }}">
-    </div>
-
-    <p><strong>Address:</strong> {{ placeDetails.formatted_address || placeDetails.vicinity || 'Not available' }}</p>
-    <p><strong>Rating:</strong> ⭐ {{ placeDetails.rating ? placeDetails.rating + ' (' + placeDetails.user_ratings_total + ' reviews)' : 'N/A' }}</p>
-    <p><strong>Phone:</strong> {{ placeDetails.formatted_phone_number || 'Not available' }}</p>
-    <p><strong>Website:</strong>
-      <a *ngIf="placeDetails.website" [href]="placeDetails.website" target="_blank" rel="noopener noreferrer">{{ placeDetails.website }}</a>
-      <span *ngIf="!placeDetails.website">Not available</span>
-    </p>
-
-    <div *ngIf="placeDetails.opening_hours">
-      <h3>Opening Hours</h3>
-      <ul *ngIf="placeDetails.opening_hours.weekday_text">
-        <li *ngFor="let day of placeDetails.opening_hours.weekday_text">{{ day }}</li>
-      </ul>
-      <p *ngIf="placeDetails.opening_hours.open_now !== undefined">
-        Currently: {{ placeDetails.opening_hours.open_now ? 'Open' : 'Closed' }}
-      </p>
-    </div>
-
-    <div *ngIf="placeDetails.reviews && placeDetails.reviews.length > 0">
-      <h3>Reviews</h3>
-      <div *ngFor="let review of placeDetails.reviews" class="review">
-        <p><strong>{{ review.author_name }}</strong> (Rating: {{ review.rating }}/5)</p>
-        <p>{{ review.text }}</p>
-        <small>{{ review.relative_time_description }}</small>
-      </div>
-    </div>
-
-    <a routerLink="/activities">Back to Activities List</a> </div>
-
-  <div *ngIf="!isLoading && !errorMessage && !placeDetails">
-    Could not find details for this activity.
+  <div *ngIf="errorMessage && !isLoading" class="error">
+    Error: {{ errorMessage }}
   </div>
+
+  <div *ngIf="(placeDetails$ | async) as details; else noDetails">
+    <div >
+      <h3>{{ details.name }}</h3>
+
+      <p><strong>Address:</strong> {{ details.formatted_address || details.vicinity || 'N/A' }}</p>
+      <p *ngIf="details.formatted_phone_number"><strong>Phone:</strong> {{ details.formatted_phone_number }}</p>
+      <p *ngIf="details.rating"><strong>Rating:</strong> {{ details.rating }} / 5</p>
+      <p *ngIf="details.website"><strong>Website:</strong> <a [href]="details.website" target="_blank" rel="noopener noreferrer">{{ details.website }}</a></p>
+      <p *ngIf="details.url"><strong>Google Maps:</strong> <a [href]="details.url" target="_blank" rel="noopener noreferrer">View on Google Maps</a></p>
+
+
+      <div *ngIf="details.opening_hours">
+        <h4>Opening Hours</h4>
+        <p *ngIf="details.opening_hours.open_now !== undefined">Currently: {{ details.opening_hours.open_now ? 'Open' : 'Closed' }}</p>
+        <ul>
+          <li *ngFor="let period of details.opening_hours.weekday_text">{{ period }}</li>
+        </ul>
+      </div>
+
+      <div *ngIf="details.photos && details.photos.length > 0">
+        <h4>Photos</h4>
+        <div class="photo-gallery">
+          <img *ngFor="let photo of details.photos"
+               [src]="photo.imageUrl"
+               [alt]="details.name + ' photo'"
+               height="150"
+               loading="lazy">
+        </div>
+      </div>
+
+      <div *ngIf="details.reviews && details.reviews.length > 0">
+        <h4>Reviews</h4>
+        <div *ngFor="let review of details.reviews" class="review">
+          <p><strong>{{ review.author_name }}</strong> (Rating: {{ review.rating }})</p>
+          <p>{{ review.text }}</p>
+          <small>{{ review.relative_time_description }}</small>
+          <hr>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <ng-template #noDetails>
+    <div *ngIf="!isLoading && !errorMessage">
+      <p>Details could not be loaded.</p>
+    </div>
+  </ng-template>
+
+  <button (click)="goBack()" class="back-button">Back to Activities</button>
+
 </div>
+

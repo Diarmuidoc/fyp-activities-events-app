@@ -14,7 +14,7 @@ const routeConfig: Routes = [
   { path: 'user-sign-up', component: UserSignUpComponent, title: 'Sign Up Page' },
   { path: 'user-login', component: UserLoginComponent, title: 'Login Page' },
   { path: 'activity', component: ActivityComponent, title: 'Activity Page' },
-  { path: 'activity-details/:placeId', component: ActivityDetailsComponent, title: 'Activity Details Page' },
+  { path: 'activity/:placeId', component: ActivityDetailsComponent, title: 'Activity Details Page' },
 ]
 
 export default routeConfig;

@@ -1,0 +1,10 @@
+
+.details-container { padding: 20px; }
+.loading, .error { margin: 20px 0; padding: 15px; border-radius: 4px; }
+.loading { background-color: #eef; }
+.error { background-color: #fdd; color: #800; }
+.photo-gallery { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+.photo-gallery img { border: 1px solid #ccc; border-radius: 4px; }
+.review { margin-bottom: 15px; border-left: 3px solid #eee; padding-left: 10px; }
+.review hr { border: 0; border-top: 1px solid #eee; margin-top: 10px; }
+.back-button { margin-top: 20px; padding: 8px 15px; cursor: pointer; }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
-import {Observable, throwError, of} from 'rxjs';
+import {Observable, throwError, of, map} from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import {environment} from '../../environments/environment';
 
@@ -9,6 +9,7 @@ import {environment} from '../../environments/environment';
 })
 export class GooglePlacesService {
   private proxyUrl = 'http://localhost:3000/places'; // Use the proxy URL
+  private detailsProxyBaseUrl = 'http://localhost:3000/api/place-details'; // Base path for details proxy endpoint
 
   constructor(private http: HttpClient) {}
 
@@ -52,6 +53,53 @@ export class GooglePlacesService {
         }
       );
     });
+  }
+
+
+  //Details page
+  getPlaceDetails(placeId: string): Observable<any> {
+    if (!placeId) {
+      // Return an observable that emits an error immediately
+      return throwError(() => new Error('Place ID is required to fetch details.'));
+    }
+
+    const url = `${this.detailsProxyBaseUrl}/${placeId}`; // Construct the full URL
+
+    console.log(`[GooglePlacesService] Calling proxy for details: ${url}`);
+
+    // Make the GET request to your details proxy endpoint
+    return this.http.get<any>(url).pipe(
+      tap(response => console.log('[GooglePlacesService] Received details response from proxy:', response)),
+      map(response => {
+        // Assuming proxy sends back { result: placeDetails, status: 'OK' }
+        // Extract the main 'result' object
+        if (response && response.status === 'OK') {
+          return response.result; // Return just the place details object
+        } else {
+          // Handle cases where proxy might return error status differently
+          throw new Error(response.details || `Failed to get place details: Status ${response.status}`);
+        }
+      }),
+      catchError(this.handleError) // Use a shared or specific error handler
+    );
+  }
+
+  // --- Shared Error Handler (Example) ---
+  private handleError(error: HttpErrorResponse | Error): Observable<never> {
+    let errorMessage = 'An unknown error occurred!';
+    if (error instanceof HttpErrorResponse) {
+      // Server-side error
+      errorMessage = `Backend error: Code ${error.status}, Message: ${error.message || JSON.stringify(error.error)}`;
+      if (error.error && error.error.details) {
+        errorMessage += ` Details: ${error.error.details}`;
+      }
+    } else {
+      { // Client-side error or error thrown from service/map operator
+        errorMessage = error.message;
+      }
+    }
+    console.error('[GooglePlacesService] Error:', errorMessage);
+    return throwError(() => new Error(errorMessage)); // Return as observable error
   }
 
   // Method to get places based on current location

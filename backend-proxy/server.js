@@ -71,5 +71,81 @@ app.get('/places', async (req, res) => {
   }
 });
 
+app.get('/api/place-details/:placeId', async (req, res) => {
+  const placeId = req.params.placeId; // Get placeId from route parameter
+
+  if (!placeId) {
+    return res.status(400).json({ error: 'Place ID is required in the URL path.' });
+  }
+
+  // Define the fields you want from the Place Details API
+  // Requesting specific fields is cheaper and faster!
+  const fields = [
+    'name',
+    'formatted_address',
+    'place_id',
+    'geometry', // For location coordinates
+    'photo',    // Request photos array (contains references)
+    'opening_hours',
+    'rating',
+    'reviews',
+    'website',
+    'formatted_phone_number',
+    'vicinity', // Usually same as formatted_address but can differ
+    'url' // Google Maps URL
+  ].join(','); // Join fields into comma-separated string
+
+  const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=${fields}&key=${GOOGLE_API_KEY}`;
+
+  try {
+    console.log(`[Proxy Details] Requesting Place Details from Google for placeId: ${placeId}`);
+    const response = await axios.get(detailsUrl);
+    console.log(`[Proxy Details] Received response from Google Details API. Status: ${response.data.status}`);
+
+    // Check Google API response status
+    if (response.data.status === 'OK') {
+      // The main result is usually in response.data.result (singular)
+      let placeDetails = response.data.result;
+
+      // --- Add Photo URLs (similar to Nearby Search) ---
+      if (placeDetails && placeDetails.photos && placeDetails.photos.length > 0) {
+        // You might want URLs for *all* photos here, not just the first
+        placeDetails.photos = placeDetails.photos.map(photo => {
+          const photoReference = photo.photo_reference;
+          const maxWidth = 800; // Maybe allow larger width for details page
+          const imageUrl = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=${maxWidth}&photoreference=${photoReference}&key=${GOOGLE_API_KEY}`;
+          // Return a new object containing original photo info + the URL
+          return {
+            ...photo, // Keep original height, width, html_attributions
+            imageUrl: imageUrl
+          };
+        });
+        console.log('[Proxy Details] Added imageUrl property to photos array.');
+      }
+      // --- End Add Photo URLs ---
+
+      // Send the potentially modified place details back to Angular
+      // Note: Google Places Details API returns a single 'result' object
+      res.json({ result: placeDetails, status: response.data.status }); // Mirror Google's structure or simplify
+
+    } else {
+      // Handle Google API errors
+      console.error('[Proxy Details] Google Place Details API Error:', response.data.status, response.data.error_message);
+      res.status(500).json({
+        error: 'Failed to fetch place details from Google Places API.',
+        details: response.data.status + (response.data.error_message ? `: ${response.data.error_message}` : '')
+      });
+    }
+
+  } catch (error) {
+    // Handle network errors
+    console.error('[Proxy Details] Error during Axios request to Google Details API:', error.response ? error.response.data : error.message);
+    res.status(error.response ? error.response.status : 500).json({
+      error: 'Proxy failed to communicate with Google Places Details API.',
+      details: error.response ? error.response.data : error.message
+    });
+  }
+});
+
 // Start the server
 app.listen(PORT, () => console.log(`Proxy server running at http://localhost:${PORT}`));
