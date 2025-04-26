@@ -1,33 +1,126 @@
+.content {
+  text-align: center;
+  padding: 20px;
+}
+
+h1 {
+  margin-bottom: 10px;
+}
+
+p {
+  margin-bottom: 15px;
+}
+
+.loading-indicator,
+.error-message {
+  margin-top: 20px;
+}
+
 .places-container {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive grid */
   gap: 20px;
   padding: 20px;
 }
 
-.card {
-  width: 250px;
-  padding: 15px;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  text-align: center;
+.place-card {
+  max-width: 400px; /* Adjust as needed */
 }
 
-.card img {
+mat-card-header {
+  display: flex;
+  flex-direction: column; /* Stack title and subtitle vertically */
+  align-items: center; /* Center items horizontally */
+  text-align: center; /* For older browsers or specific cases */
+}
+
+mat-card-title {
+  font-size: 1.2em;
+  margin-bottom: 5px;
+  text-align: center; /* Ensure title is centered */
+}
+
+mat-card-subtitle {
+  color: rgba(0, 0, 0, 0.6);
+  text-align: center; /* Ensure subtitle is centered */
+}
+
+img{
   width: 100%;
-  height: 150px;
+  aspect-ratio: 16 / 9; /* Adjust as needed */
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 4px; /* Optional image border-radius */
+  margin-bottom: 10px; /* Space below the image */
 }
 
-
-.content{
+.no-image-placeholder {
+  background-color: #f0f0f0;
+  color: #777;
+  display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  text-align: center;
+  height: 150px; /* Match the image height */
+  border-radius: 4px;
+  margin-bottom: 10px;
 }
+
+mat-card-content {
+  margin-bottom: 15px;
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: flex-end; /* Align button to the right */
+}
+
+mat-card-actions button {
+  /* Add any specific button styling here */
+}
+
+.save-button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  width: 100%; /* Make button full width of actions area */
+}
+.save-button:hover {
+  background-color: #2980b9;
+}
+
+/*.places-container {*/
+/*  display: flex;*/
+/*  flex-wrap: wrap;*/
+/*  gap: 20px;*/
+/*  padding: 20px;*/
+/*}*/
+
+/*.card {*/
+/*  width: 250px;*/
+/*  padding: 15px;*/
+/*  background: white;*/
+/*  border-radius: 10px;*/
+/*  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);*/
+/*  text-align: center;*/
+/*}*/
+
+/*.card img {*/
+/*  width: 100%;*/
+/*  height: 150px;*/
+/*  object-fit: cover;*/
+/*  border-radius: 8px;*/
+/*}*/
+
+
+/*.content{*/
+/*  justify-content: center;*/
+/*  align-items: center;*/
+/*  height: 100vh;*/
+/*  text-align: center;*/
+/*}*/
 
 /*.card-container {*/
 /*  display: flex;*/

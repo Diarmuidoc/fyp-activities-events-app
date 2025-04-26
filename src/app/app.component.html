@@ -40,6 +40,7 @@
       @if (authService.currentUserSig()){
         <div class="right-item">
           <li><p>{{ userDisplayName }}</p></li>
+          <li><a routerLink="/profile">Profile</a></li>
           <li><a (click)="logout()">Logout</a></li>
         </div>
 

@@ -1,5 +1,4 @@
 <div class="details-container">
-  <h2>Activity Details</h2>
 
 <!--  <div *ngIf="isLoading" class="loading">-->
 <!--    Loading details...-->
@@ -11,11 +10,13 @@
 
   <div *ngIf="(placeDetails$ | async) as details; else noDetails">
     <div >
-      <h3>{{ details.name }}</h3>
+      <h3 class="page-title">{{ details.name }}</h3>
 
       <p><strong>Address:</strong> {{ details.formatted_address || details.vicinity || 'N/A' }}</p>
       <p *ngIf="details.formatted_phone_number"><strong>Phone:</strong> {{ details.formatted_phone_number }}</p>
-      <p *ngIf="details.rating"><strong>Rating:</strong> {{ details.rating }} / 5</p>
+      <div *ngIf="details.rating" class="rating" [style.--rating]="details.rating">
+        <strong>Rating:</strong> <span class="stars"></span> ({{ details.rating }} / 5)
+      </div>
       <p *ngIf="details.website"><strong>Website:</strong> <a [href]="details.website" target="_blank" rel="noopener noreferrer">{{ details.website }}</a></p>
       <p *ngIf="details.url"><strong>Google Maps:</strong> <a [href]="details.url" target="_blank" rel="noopener noreferrer">View on Google Maps</a></p>
 
@@ -35,7 +36,8 @@
                [src]="photo.imageUrl"
                [alt]="details.name + ' photo'"
                height="150"
-               loading="lazy">
+               loading="lazy"
+               (error)="handleImageError($event, photo)">
         </div>
       </div>
 

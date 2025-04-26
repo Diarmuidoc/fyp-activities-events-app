@@ -3,7 +3,8 @@ import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http'; // Import HttpClient and HttpClientModule
 import { environment } from '../../../environments/environment';
-import { Observable } from 'rxjs'; // Import Observable for type hinting
+import { Observable } from 'rxjs';
+import {MatAnchor} from '@angular/material/button'; // Import Observable for type hinting
 
 // Define an interface for the expected event structure (optional but good practice)
 interface TicketmasterEvent {
@@ -38,7 +39,9 @@ interface TicketmasterResponse {
   imports: [
     CommonModule,
     MatCardModule,
-    HttpClientModule, // Add HttpClientModule here for standalone components
+    HttpClientModule,
+    MatAnchor,
+    // Add HttpClientModule here for standalone components
   ],
   templateUrl: './event.component.html',
   styleUrl: './event.component.css',

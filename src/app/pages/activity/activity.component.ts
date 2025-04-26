@@ -1,17 +1,36 @@
-import { Component, OnInit, OnDestroy } from '@angular/core'; // Import OnDestroy
+import { Component, OnInit, OnDestroy, inject  } from '@angular/core'; // Import OnDestroy
 import { CommonModule, NgIf, NgForOf } from '@angular/common'; // Keep CommonModule or NgIf/NgForOf based on Angular version/setup
 import { GooglePlacesService } from '../../services/google-places.service'; // Correct path to your service
 // environment is no longer needed here for the API key
 // import { environment } from '../../../environments/environment';
 import { RouterLink } from '@angular/router';
-import { Subscription } from 'rxjs'; // Import Subscription
+import {Subscription, Observable, map} from 'rxjs';
+import {
+  MatCard,
+  MatCardActions,
+  MatCardContent,
+  MatCardHeader,
+  MatCardImage,
+  MatCardModule
+} from '@angular/material/card';
+import {MatButton} from '@angular/material/button';
+import { Auth, authState } from '@angular/fire/auth';
+import {SavedActivity, UserListService} from '../../services/user-list.service';
+
 
 @Component({
   selector: 'app-activity',
   standalone: true,
   imports: [
-    CommonModule, // Includes NgIf, NgForOf etc.
+    CommonModule,
     RouterLink,
+    MatCard,
+    MatCardHeader,
+    MatCardContent,
+    MatCardActions,
+    MatButton,
+    MatCardImage,
+    MatCardModule,
   ],
   templateUrl: './activity.component.html',
   styleUrl: './activity.component.css'
@@ -21,11 +40,15 @@ export class ActivityComponent implements OnInit, OnDestroy { // Implement OnDes
   isLoading: boolean = false;
   errorMessage: string | null = null;
   private placesSubscription: Subscription | null = null; // To hold the subscription
+  private userListService = inject(UserListService);
+  private auth = inject(Auth);
+  isLoggedIn$: Observable<boolean>;
 
-  // API Key is no longer needed here - remove constructor logic related to it
+
   constructor(private googlePlacesService: GooglePlacesService) {
     // Constructor is now simpler, just injects the service
     console.log("ActivityComponent initialized");
+    this.isLoggedIn$ = authState(this.auth).pipe(map(user => !!user));
   }
 
   ngOnInit(): void {
@@ -99,14 +122,7 @@ export class ActivityComponent implements OnInit, OnDestroy { // Implement OnDes
     this.fetchActivities();
   }
 
-  // REMOVED: getPhotoUrl - This logic should not use the API key directly in the component.
-  // If you need photos, consider:
-  // 1. Having the proxy return full photo URLs (requires proxy modification).
-  // 2. Having the service create a URL *without* the key (may not work depending on Google's requirements).
-  // 3. Using Place IDs with the Maps Embed API or JS SDK in your template if applicable.
 
-  // REMOVED: onImageError - Keep this if your template still tries to load images and you want fallback logic.
-  // Otherwise, it can be removed if you remove image tags for now.
   onImageError(event: Event): void {
     const target = event.target as HTMLImageElement;
     console.warn('Image failed to load:', target?.src);
@@ -114,4 +130,35 @@ export class ActivityComponent implements OnInit, OnDestroy { // Implement OnDes
     target.style.display = 'none'; // Simple hide
     // target.src = 'assets/images/placeholder.png'; // Replace with placeholder
   }
+
+  async saveActivity(place: any): Promise<void> {
+    if (!this.auth.currentUser) {
+      alert('Please log in to save activities.');
+      // Optionally redirect to login: this.router.navigate(['/login']);
+      return;
+    }
+    if (!place || !place.place_id) {
+      console.error("Cannot save place without place_id:", place);
+      alert("Could not save this activity.");
+      return;
+    }
+
+    // Construct the data object matching SavedActivity interface
+    const activityToSave: SavedActivity = {
+      place_id: place.place_id,
+      name: place.name,
+      vicinity: place.vicinity,
+      imageUrl: place.imageUrl || null // Use the imageUrl added by the proxy
+    };
+
+    try {
+      await this.userListService.addActivity(activityToSave);
+      alert(`${place.name} saved successfully!`);
+      // Optional: Add visual feedback, e.g., change button state
+    } catch (error) {
+      console.error('Error saving activity:', error);
+      alert(`Failed to save ${place.name}. Please try again.`);
+    }
+  }
+
 }
