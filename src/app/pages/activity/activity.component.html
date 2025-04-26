@@ -1,55 +1,65 @@
 <div class="content">
   <h1>Welcome to the Activities Page</h1>
-  <p>Explore local attractions and points of interest.</p> <section>
+  <p>Explore local attractions and points of interest.</p>
 
-  <div *ngFor="let place of places" class="attraction-card">
-    <a [routerLink]="['/activity', place.place_id]" class="card-link">
+  <section>
+    <div *ngIf="isLoading" class="loading-indicator">
+      Loading activities...
+    </div>
 
-      <h3>{{ place.name }}</h3>
-      <p>{{ place.vicinity }}</p>
-      <p *ngIf="place.rating">Rating: {{ place.rating }} / 5</p>
+    <div *ngIf="errorMessage" class="error-message">
+      Error fetching activities: {{ errorMessage }}
+    </div>
 
-      <img *ngIf="place.imageUrl"
-           [src]="place.imageUrl"
-           alt="Photo of {{ place.name }}"
-           width="300"
-           (error)="onImageError($event)">
+    <div *ngIf="!isLoading && !errorMessage && places.length > 0" class="places-container">
+      <mat-card *ngFor="let place of places"
+                class="place-card"
+                [routerLink]="['/activity', place.place_id]"
+                style="cursor: pointer;"
+                title="View details for {{ place.name }}">
+        <mat-card-header>
+          <mat-card-title>{{ place.name }}</mat-card-title>
+          <mat-card-subtitle>{{ place.vicinity || 'Address not available' }}</mat-card-subtitle>
+        </mat-card-header>
+        <img mat-card-image
+             *ngIf="place.photos && place.photos.length > 0"
+             [src]="place.imageUrl"
+             alt="Image of {{ place.name }}">
+        <div *ngIf="!place.photos || place.photos.length === 0" class="no-image-placeholder">
+          No Image Available
+        </div>
+        <mat-card-content>
+          <p>Rating: ⭐ {{ place.rating ? place.rating : 'N/A' }}</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button>View Details</button>
+        </mat-card-actions>
+        <div class="card-actions" *ngIf="isLoggedIn$ | async">
+          <button (click)="saveActivity(place)" class="save-button" title="Save Activity">
+            &#x2764;&#xFE0F; Save </button>
+        </div>
+      </mat-card>
 
-      <div *ngIf="!place.imageUrl">
-        <p><i>(No photo available)</i></p>
-      </div>
-    </a>
-  </div>
+<!--      <div *ngFor="let place of places"-->
+<!--           class="card"-->
+<!--           [routerLink]="['/activity', place.place_id]"-->
+<!--           style="cursor: pointer;" title="View details for {{ place.name }}"> <img *ngIf="place.photos && place.photos.length > 0"-->
+<!--                                                                                    [src]="place.imageUrl"-->
+<!--                                                                                    alt="Image of {{ place.name }}" />-->
+<!--        <div *ngIf="!place.photos || place.photos.length === 0" class="no-image-placeholder">-->
+<!--          No Image Available-->
+<!--        </div>-->
 
-<!--  <div *ngIf="isLoading" class="loading-indicator">-->
-<!--    Loading activities...-->
-<!--  </div>-->
+<!--        <h3>{{ place.name }}</h3>-->
+<!--        <p>{{ place.vicinity || 'Address not available' }}</p>-->
+<!--        <p>Rating: ⭐ {{ place.rating ? place.rating : 'N/A' }}</p>-->
 
-<!--  <div *ngIf="errorMessage" class="error-message">-->
-<!--    Error fetching activities: {{ errorMessage }}-->
-<!--  </div>-->
-
-<!--  <div *ngIf="!isLoading && !errorMessage && places.length > 0" class="places-container">-->
-<!--    <div *ngFor="let place of places"-->
-<!--         class="card"-->
-<!--         [routerLink]="['/activity', place.place_id]"-->
-<!--         style="cursor: pointer;" title="View details for {{ place.name }}"> <img *ngIf="place.photos && place.photos.length > 0"-->
-<!--                                                                                  [src]="place.imageUrl"-->
-<!--                                                                                  alt="Image of {{ place.name }}" />-->
-<!--      <div *ngIf="!place.photos || place.photos.length === 0" class="no-image-placeholder">-->
-<!--        No Image Available-->
 <!--      </div>-->
-
-<!--      <h3>{{ place.name }}</h3>-->
-<!--      <p>{{ place.vicinity || 'Address not available' }}</p>-->
-<!--      <p>Rating: ⭐ {{ place.rating ? place.rating : 'N/A' }}</p>-->
-
-<!--    </div>-->
-<!--  </div>-->
+  </div>
 
 
 <!--  <div *ngIf="!isLoading && !errorMessage && places.length === 0" class="no-results">-->
 <!--    No activities found nearby. Try adjusting search criteria or location.-->
 <!--  </div>-->
-</section>
+  </section>
 </div>

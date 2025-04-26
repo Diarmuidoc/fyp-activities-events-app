@@ -1,10 +1,305 @@
 
-.details-container { padding: 20px; }
-.loading, .error { margin: 20px 0; padding: 15px; border-radius: 4px; }
-.loading { background-color: #eef; }
-.error { background-color: #fdd; color: #800; }
-.photo-gallery { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
-.photo-gallery img { border: 1px solid #ccc; border-radius: 4px; }
-.review { margin-bottom: 15px; border-left: 3px solid #eee; padding-left: 10px; }
-.review hr { border: 0; border-top: 1px solid #eee; margin-top: 10px; }
-.back-button { margin-top: 20px; padding: 8px 15px; cursor: pointer; }
+/*.details-container { padding: 20px; }*/
+/*.loading, .error { margin: 20px 0; padding: 15px; border-radius: 4px; }*/
+/*.loading { background-color: #eef; }*/
+/*.error { background-color: #fdd; color: #800; }*/
+/*.photo-gallery { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }*/
+/*.photo-gallery img { border: 1px solid #ccc; border-radius: 4px; }*/
+/*.review { margin-bottom: 15px; border-left: 3px solid #eee; padding-left: 10px; }*/
+/*.review hr { border: 0; border-top: 1px solid #eee; margin-top: 10px; }*/
+/*.back-button { margin-top: 20px; padding: 8px 15px; cursor: pointer; }*/
+
+
+/* --- Overall Container --- */
+.details-container {
+  max-width: 900px; /* Limit width for readability */
+  margin: 20px auto; /* Center the container */
+  padding: 25px 30px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Example font */
+  line-height: 1.6;
+  color: #333;
+}
+
+/* --- Back Button --- */
+.back-button {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  color: #333;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.2s ease;
+  margin-bottom: 20px; /* Space below button */
+}
+
+.back-button:hover {
+  background-color: #e0e0e0;
+}
+
+/* --- Titles --- */
+.page-title {
+  text-align: center;
+  color: #2c3e50; /* Dark blue-grey */
+  margin-bottom: 30px;
+  font-weight: 600;
+}
+
+.place-name { /* h3 inside basic-info */
+  color: #3498db; /* Blue */
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.8em;
+  font-weight: 700;
+}
+
+h4 { /* Section titles */
+  color: #16a085; /* Teal color */
+  margin-top: 0;
+  margin-bottom: 15px;
+  padding-bottom: 5px;
+  border-bottom: 2px solid #e0e0e0;
+  font-size: 1.3em;
+  font-weight: 600;
+}
+
+/* --- General Section Styling --- */
+.section {
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: #f9f9f9; /* Slightly off-white background for sections */
+  border: 1px solid #eee;
+  border-radius: 6px;
+}
+
+/* --- Basic Info Section --- */
+.basic-info p {
+  margin: 8px 0;
+}
+
+.basic-info strong {
+  color: #555;
+  min-width: 80px; /* Align text slightly */
+  display: inline-block;
+}
+
+.links p {
+  margin: 5px 0;
+}
+
+.links a {
+  color: #3498db;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.links a:hover {
+  color: #2980b9;
+  text-decoration: underline;
+}
+
+/* Basic Star Rating Display */
+.rating {
+  margin-bottom: 15px;
+  font-size: 1.1em;
+}
+.stars {
+  --percent: calc(var(--rating) / 5 * 100%); /*Shows as an error but works*/
+  display: inline-block;
+  font-size: 1.2em; /* Adjust size */
+  font-family: Times; /* Default stars */
+  line-height: 1;
+  margin-left: 10px;
+  position: relative;
+  top: 2px; /* Align baseline */
+}
+.stars::before {
+  content: '★★★★★';
+  letter-spacing: 3px;
+  background: linear-gradient(90deg, #fcc419 var(--percent), #e0e0e0 var(--percent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+
+/* --- Opening Hours Section --- */
+.opening-hours .open {
+  color: #27ae60; /* Green for open */
+  font-weight: bold;
+}
+
+.opening-hours .closed {
+  color: #c0392b; /* Red for closed */
+  font-weight: bold;
+}
+
+.hours-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 10px 0 0 0;
+  font-size: 0.95em;
+  color: #555;
+}
+
+.hours-list li {
+  padding: 4px 0;
+}
+
+/* --- Photos Section --- */
+.photo-gallery {
+  display: grid;
+  /* Adjust columns based on screen width */
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.photo-gallery img {
+  width: 100%;
+  height: 120px; /* Fixed height, adjust as needed */
+  object-fit: cover; /* Crop images nicely */
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+}
+
+.photo-gallery img:hover {
+  transform: scale(1.05); /* Slight zoom on hover */
+}
+
+/* --- Reviews Section --- */
+.review-card {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.review-author {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.review-author strong {
+  color: #333;
+  font-weight: 600;
+}
+
+.review-author .stars { /* Adjust star size for reviews */
+  font-size: 1em;
+  margin-left: 0; /* Remove margin if using justify-content */
+  top: 0;
+}
+
+
+.review-text {
+  color: #444;
+  font-size: 0.95em;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+
+.review-time {
+  font-size: 0.85em;
+  color: #777;
+  display: block; /* Put time on its own line */
+  text-align: right;
+}
+
+/* Remove hr if using cards */
+/* hr { border: 0; border-top: 1px solid #eee; margin-top: 15px; } */
+
+
+/* --- Error Message --- */
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* --- Fallback Message --- */
+.no-details {
+  text-align: center;
+  color: #777;
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+}
+
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+  .details-container {
+    margin: 10px;
+    padding: 20px;
+  }
+
+  .page-title {
+    font-size: 1.8em;
+  }
+
+  .place-name {
+    font-size: 1.6em;
+  }
+
+  h4 {
+    font-size: 1.2em;
+  }
+
+  .photo-gallery {
+    /* Adjust columns for smaller screens */
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+
+  .photo-gallery img{
+    height: 100px;
+  }
+
+  .section {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .details-container {
+    padding: 15px;
+  }
+
+  .back-button {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 15px;
+  }
+
+  .place-name {
+    font-size: 1.4em;
+  }
+
+  .photo-gallery {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+
+  .photo-gallery img {
+    height: 80px;
+  }
+
+  .review-author {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px; /* Add gap between name and stars */
+  }
+
+}

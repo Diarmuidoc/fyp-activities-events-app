@@ -1,0 +1,128 @@
+/* src/app/user-profile/user-profile.component.css */
+.profile-container {
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.profile-picture {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin: 15px auto;
+  display: block;
+  object-fit: cover;
+  border: 3px solid #ddd;
+}
+
+.logout-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #e74c3c; /* Red color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.2s ease;
+}
+
+.logout-button:hover {
+  background-color: #c0392b;
+}
+
+.section-divider {
+  border: 0;
+  border-top: 1px solid #ddd;
+  margin: 30px 0;
+}
+
+h3 { /* Style for "My Saved Activities" */
+  margin-bottom: 20px;
+  color: #333;
+  text-align: left;
+}
+
+.loading-list, .empty-list {
+  text-align: center;
+  color: #777;
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+}
+
+.saved-list {
+  margin-top: 15px;
+}
+
+.saved-activity-card {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  gap: 15px; /* Space between elements */
+}
+
+.saved-activity-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 4px;
+  flex-shrink: 0; /* Prevent image from shrinking */
+}
+
+.saved-activity-info {
+  flex-grow: 1; /* Allow info section to take available space */
+}
+
+.saved-activity-info h4 {
+  margin: 0 0 5px 0; /* Reset margin */
+  font-size: 1.1em;
+  color: #3498db;
+}
+.saved-activity-info p {
+  margin: 0 0 8px 0;
+  font-size: 0.9em;
+  color: #555;
+}
+
+.view-details-link {
+  font-size: 0.9em;
+  color: #16a085;
+  text-decoration: none;
+}
+.view-details-link:hover {
+  text-decoration: underline;
+}
+
+
+.remove-button {
+  background-color: transparent;
+  border: 1px solid #e74c3c;
+  color: #e74c3c;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.2em;
+  font-weight: bold;
+  width: 30px;
+  height: 30px;
+  line-height: 28px; /* Adjust for vertical centering */
+  text-align: center;
+  padding: 0;
+  flex-shrink: 0;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.remove-button:hover {
+  background-color: #e74c3c;
+  color: white;
+}

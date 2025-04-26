@@ -1,0 +1,41 @@
+<div class="profile-container">
+  <h2>User Profile</h2>
+
+  <div *ngIf="isLoading"> <p>Loading user data...</p> </div>
+  <div *ngIf="(user$ | async) as user; else loggedOutContent">
+    <div *ngIf="!isLoading" class="user-details">
+      <p><strong>Email:</strong> {{ user.email }}</p>
+      <img *ngIf="user.photoURL" [src]="user.photoURL" alt="User profile picture" class="profile-picture">
+      <button (click)="logout()" class="logout-button">Logout</button>
+    </div>
+  </div>
+  <ng-template #loggedOutContent> </ng-template>
+
+  <hr class="section-divider"> <h3>My Saved Activities</h3>
+
+  <div *ngIf="isLoadingList" class="loading-list">
+    Loading saved activities...
+  </div>
+
+  <div *ngIf="!(savedActivities$ | async)?.length && !isLoadingList" class="empty-list">
+    You haven't saved any activities yet. Browse the <a routerLink="/activities">Activities page</a> to add some!
+  </div>
+
+  <div class="saved-list" *ngIf="(savedActivities$ | async) as activities; else listError">
+    <div *ngIf="activities.length > 0">
+      <div *ngFor="let activity of activities" class="saved-activity-card">
+        <img *ngIf="activity.imageUrl" [src]="activity.imageUrl" alt="Photo of {{ activity.name }}" class="saved-activity-image">
+        <div class="saved-activity-info">
+          <h4>{{ activity.name }}</h4>
+          <p>{{ activity.vicinity }}</p>
+          <a [routerLink]="['/activity', activity.place_id]" class="view-details-link">View Details</a>
+        </div>
+        <button (click)="removeSavedActivity(activity.place_id)" class="remove-button" title="Remove from list">
+          &times; </button>
+      </div>
+    </div>
+  </div>
+  <ng-template #listError>
+  </ng-template>
+
+</div>

@@ -47,7 +47,8 @@ export class ActivityDetailsComponent implements OnInit, OnDestroy {
           this.errorMessage = 'Activity ID was not provided.';
           this.isLoading = false;
           // Navigate back or show error, return an empty/error observable
-          // this.router.navigate(['/activities']); // Example navigation back
+          // this.router.navigate(['/activities']); // E
+          // xample navigation back
           return throwError(() => new Error('Place ID is missing'));
         }
         console.log(`Workspaceing details for Place ID: ${placeId}`);
@@ -88,6 +89,12 @@ export class ActivityDetailsComponent implements OnInit, OnDestroy {
 
   // Helper to go back to the list view
   goBack(): void {
-    this.router.navigate(['/activities']); // Navigate to the activities list page
+    this.router.navigate(['/activity']); // Navigate to the activities list page
+  }
+
+  handleImageError(event: Event, photo: any): void {
+    console.error('Failed to load image:', photo.imageUrl, event);
+    // Optionally, set a placeholder image:
+    (event.target as HTMLImageElement).src = '/assets/image-placeholder.png';
   }
 }
