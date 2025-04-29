@@ -4,21 +4,21 @@ import {GoogleMap} from '@angular/google-maps'
 
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-map',
   standalone: true,
   imports: [RouterModule, GoogleMap],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.css',
+  templateUrl: './map.component.html',
+  styleUrl: './map.component.css',
 })
 
-export class HomeComponent implements OnInit {
+export class MapComponent implements OnInit {
   title = 'Tourism Events and Activities';
   zoom = 12;
   center: google.maps.LatLngLiteral = { lat: 52.3369, lng: -6.4633 };
   options: google.maps.MapOptions = {
-      mapTypeId: 'roadmap',
-      zoomControl: true,
-      scrollwheel: true,
+    mapTypeId: 'roadmap',
+    zoomControl: true,
+    scrollwheel: true,
   }
 
   ngOnInit() {
@@ -38,4 +38,4 @@ export class HomeComponent implements OnInit {
       console.error("Geolocation not supported by this browser.");
     }
   }
-  }
+}

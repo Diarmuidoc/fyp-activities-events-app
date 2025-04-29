@@ -1,8 +1,6 @@
-import { Component, OnInit, OnDestroy, inject  } from '@angular/core'; // Import OnDestroy
-import { CommonModule, NgIf, NgForOf } from '@angular/common'; // Keep CommonModule or NgIf/NgForOf based on Angular version/setup
-import { GooglePlacesService } from '../../services/google-places.service'; // Correct path to your service
-// environment is no longer needed here for the API key
-// import { environment } from '../../../environments/environment';
+import { Component, OnInit, OnDestroy, inject  } from '@angular/core';
+import { CommonModule, NgIf, NgForOf } from '@angular/common';
+import { GooglePlacesService } from '../../services/google-places.service';
 import { RouterLink } from '@angular/router';
 import {Subscription, Observable, map} from 'rxjs';
 import {
@@ -35,7 +33,8 @@ import {SavedActivity, UserListService} from '../../services/user-list.service';
   templateUrl: './activity.component.html',
   styleUrl: './activity.component.css'
 })
-export class ActivityComponent implements OnInit, OnDestroy { // Implement OnDestroy
+
+export class ActivityComponent implements OnInit, OnDestroy {
   places: any[] = [];
   isLoading: boolean = false;
   errorMessage: string | null = null;
@@ -43,6 +42,9 @@ export class ActivityComponent implements OnInit, OnDestroy { // Implement OnDes
   private userListService = inject(UserListService);
   private auth = inject(Auth);
   isLoggedIn$: Observable<boolean>;
+
+  //Try get working
+  savedActivityIds: Set<string> = new Set<string>(); // To track saved activities
 
 
   constructor(private googlePlacesService: GooglePlacesService) {
@@ -55,6 +57,7 @@ export class ActivityComponent implements OnInit, OnDestroy { // Implement OnDes
     // Call fetchActivities directly on init
     this.fetchActivities();
   }
+
 
   ngOnDestroy(): void {
     // Unsubscribe when the component is destroyed
@@ -74,10 +77,8 @@ export class ActivityComponent implements OnInit, OnDestroy { // Implement OnDes
     // Store the subscription so we can unsubscribe later
     this.placesSubscription = this.googlePlacesService.getPlacesNearby(10000, 'tourist_attraction') // 10km radius, tourist attractions
       .subscribe({
-        // Type is 'any' as requested
         next: (data: any) => {
           console.log('[ActivityComponent] Received data from service:', data);
-          // **Important Check**: The actual places are usually in a 'results' array from Google Places API response
           if (data && data.results && Array.isArray(data.results)) {
             this.places = data.results;
             console.log(`Assigned ${this.places.length} places.`);
@@ -131,10 +132,13 @@ export class ActivityComponent implements OnInit, OnDestroy { // Implement OnDes
     // target.src = 'assets/images/placeholder.png'; // Replace with placeholder
   }
 
+  isActivityAlreadySaved(placeId: string): boolean {
+    return this.savedActivityIds.has(placeId);
+  }
+
   async saveActivity(place: any): Promise<void> {
     if (!this.auth.currentUser) {
       alert('Please log in to save activities.');
-      // Optionally redirect to login: this.router.navigate(['/login']);
       return;
     }
     if (!place || !place.place_id) {

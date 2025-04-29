@@ -1,6 +1,7 @@
 .content {
   text-align: center;
-  padding: 20px; /* Add some padding around the content */
+  padding: 20px;
+  padding-bottom: 50px;
 }
 
 h2 {
@@ -9,83 +10,54 @@ h2 {
 
 .event-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive grid */
-  gap: 20px; /* Increased gap for better spacing */
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
   padding: 20px;
 }
 
 .event-card {
-  max-width: 400px; /* Slightly increased max width */
-  display: flex; /* Enable flexbox for card content alignment */
-  flex-direction: column; /* Stack card elements vertically */
+  max-width: 400px;
+  height: 450px;
+  display: flex;
+  flex-direction: column;
+  background-color: #B2CBE5;
 }
 
 mat-card-header {
-  flex-shrink: 0; /* Prevent header from shrinking */
+  flex-shrink: 0;
+  height: 35%;
 }
 
 img {
-  aspect-ratio: 16 / 9; /* Enforce a common aspect ratio */
-  object-fit: cover; /* Cover the area, cropping if necessary */
-  width: 100%; /* Make the image take the full width of the card */
-  display: block; /* Prevent extra space below the image */
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  width: 100%;
+  display: block;
 }
 
 mat-card-content {
-  flex-grow: 1; /* Allow content to take up remaining vertical space */
-  padding: 16px; /* Add padding to the content area */
+  flex-grow: 1;
+  padding: 16px;
 }
 
 mat-card-actions {
   flex-shrink: 0; /* Prevent actions from shrinking */
-  padding: 8px 16px; /* Adjust padding for actions */
+  padding: 8px 16px;
 }
 
 @media (max-width: 720px) {
   .event-list {
-    display: flex; /* Change to flexbox */
-    flex-direction: column; /* Stack cards vertically */
-    align-items: center; /* Center items horizontally */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .event-card {
-    width: 100%; /* Make cards take full width on mobile */
-    max-width: 350px; /* Optional: set a maximum width for mobile cards */
+    width: 100%;
+    max-width: 350px;
   }
 }
 
-/*.content{*/
-/*  justify-content: center;*/
-/*  align-items: center;*/
-/*  height: 100vh;*/
-/*  text-align: center;*/
-/*}*/
 
-/*.card-container {*/
-/*  display: flex;*/
-/*  justify-content: center;*/
-/*  flex-wrap: wrap;*/
-/*  gap: 20px;*/
-/*  padding: 20px;*/
-/*}*/
 
-/*.event-card {*/
-/*  width: 300px;*/
-/*}*/
 
-/*.event-list {*/
-/*  display: grid;*/
-/*  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); !* Responsive grid *!*/
-/*  gap: 16px; !* Spacing between cards *!*/
-/*  padding: 16px;*/
-/*}*/
-
-/*.event-card {*/
-/*  max-width: 400px; !* Max width for cards *!*/
-/*}*/
-
-/*!* Ensure images don't distort aspect ratio *!*/
-/*mat-card-image {*/
-/*  aspect-ratio: 16 / 9; !* Common aspect ratio for event images *!*/
-/*  object-fit: cover; !* Cover the area without stretching *!*/
-/*}*/

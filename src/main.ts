@@ -5,6 +5,7 @@ import routeConfig from './app/routes'
 import {appConfig} from './app/app.config';
 import {provideHttpClient} from '@angular/common/http';
 
+
 (self as any).FIREBASE_APPCHECK_DEBUG_TOKEN = true;
 
 // Function to load Google Maps API script dynamically
@@ -47,14 +48,17 @@ loadGoogleMapsScript()
   })
   .catch(error => console.error('Google Maps API failed to load:', error));
 
+
 bootstrapApplication(AppComponent, appConfig)
   .catch(err => console.error(err));
-
-
-// Can Both of these exist together
-bootstrapApplication(AppComponent, {
-  providers: [provideHttpClient()]
-}).catch(err => console.error(err));
+// bootstrapApplication(AppComponent, appConfig)
+//   .catch(err => console.error(err));
+//
+//
+// // Can Both of these exist together
+// bootstrapApplication(AppComponent, {
+//   providers: [provideHttpClient()]
+// }).catch(err => console.error(err));
 
 
 

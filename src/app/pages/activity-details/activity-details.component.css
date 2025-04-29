@@ -303,3 +303,15 @@ h4 { /* Section titles */
   }
 
 }
+
+.map-section {
+  /* Uses .section styles already */
+  padding-top: 10px; /* Adjust padding if needed */
+}
+
+google-map {
+  border-radius: 6px; /* Match section border-radius */
+  border: 1px solid #eee; /* Optional subtle border */
+  display: block; /* Ensure it behaves like a block element */
+  margin-top: 15px; /* Space below the heading */
+}

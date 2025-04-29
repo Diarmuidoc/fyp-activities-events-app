@@ -35,6 +35,10 @@ nav ul li p {
 .right-item {
   margin-left: auto;
   display: flex;
+}
 
+.center{
+  margin-left: auto;
+  margin-right: auto;
 }
 

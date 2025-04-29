@@ -33,6 +33,9 @@ nav ul li a:hover {
   text-align: center;
 }
 
+.map{
+  padding: 50px;
+}
 /*.map{*/
 /*  display: flex;*/
 /*  justify-content: center;*/

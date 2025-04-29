@@ -1,9 +1,61 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { Auth, User, signOut, authState } from '@angular/fire/auth'; // Import necessary auth functions/types
+import { Auth, User, signOut, authState } from '@angular/fire/auth';
 import {Router, RouterLink} from '@angular/router';
-import { Observable, of } from 'rxjs'; // Import Observable and of
+import { Observable, of } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import {SavedActivity, UserListService} from '../../services/user-list.service'; // Import CommonModule for standalone
+import {SavedActivity, UserListService} from '../../services/user-list.service';
+import {AppCheck} from '@angular/fire/app-check';
+
+
+// @Component({
+//   selector: 'app-user-profile',
+//   standalone: true,
+//   imports: [CommonModule, RouterLink],
+//   templateUrl: './user-profile.component.html',
+//   styleUrls: ['./user-profile.component.css']
+// })
+// export class UserProfileComponent implements OnInit {
+//   private auth: Auth = inject(Auth);
+//   private router: Router = inject(Router);
+//   private userListService = inject(UserListService);
+//   private appCheckService: AppCheck = inject(AppCheck); // Inject AppCheck service
+//
+//   user$: Observable<User | null> = authState(this.auth);
+//   savedActivities$: Observable<SavedActivity[]>;
+//
+//   isLoading: boolean = true;
+//   isLoadingList: boolean = true;
+//
+//   constructor() {
+//     this.savedActivities$ = this.userListService.getSavedActivities();
+//   }
+//
+//   async ngOnInit(): Promise<void> {
+//     this.savedActivities$.subscribe({
+//       next: (list) => {
+//         console.log("Loaded saved activities:", list);
+//         this.isLoadingList = false;
+//       },
+//       error: (err) => {
+//         console.error("Error loading saved activities:", err);
+//         this.isLoadingList = false;
+//       }
+//     });
+//
+//     this.user$.subscribe(user => {
+//       this.isLoading = false;
+//     });
+//
+//     // Debugging: Get App Check token
+//     try {
+//       const appCheck = await appCheckInstance(this.appCheckService); // Get the instance
+//       const token = await appCheck.getToken();
+//       console.log("App Check Token:", token?.token); // Access the token property
+//     } catch (error) {
+//       console.error("Error getting App Check token:", error);
+//     }
+//   }
+
 
 @Component({
   selector: 'app-user-profile',
@@ -29,7 +81,6 @@ export class UserProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Subscribe to list to handle loading state (optional)
     this.savedActivities$.subscribe({
       next: (list) => {
         console.log("Loaded saved activities:", list);
@@ -38,7 +89,6 @@ export class UserProfileComponent implements OnInit {
       error: (err) => {
         console.error("Error loading saved activities:", err);
         this.isLoadingList = false;
-        // Maybe set an error message
       }
     });
 

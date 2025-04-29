@@ -7,6 +7,7 @@ import {ActivityComponent} from './pages/activity/activity.component';
 import {ActivityDetailsComponent} from './pages/activity-details/activity-details.component';
 import { UserProfileComponent } from './pages/user-profile/user-profile.component';
 import { authGuard } from './auth.guard';
+import {MapComponent} from './pages/map/map.component';
 
 const routeConfig: Routes = [
   { path: '', component: HomeComponent, title: 'Home Page' },
@@ -15,6 +16,7 @@ const routeConfig: Routes = [
   { path: 'user-login', component: UserLoginComponent, title: 'Login Page' },
   { path: 'activity', component: ActivityComponent, title: 'Activity Page' },
   { path: 'activity/:placeId', component: ActivityDetailsComponent, title: 'Activity Details Page' },
+  { path: 'map', component: MapComponent, title: 'Map Page' },
   {
     path: 'profile',
     component: UserProfileComponent,

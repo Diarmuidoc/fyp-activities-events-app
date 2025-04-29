@@ -1,30 +1,51 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router'; // Import ActivatedRoute and Router
-import { GooglePlacesService } from '../../services/google-places.service'; // Import the service
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { GooglePlacesService } from '../../services/google-places.service';
 import { Subscription, Observable, of, throwError } from 'rxjs';
 import { switchMap, catchError, tap, finalize } from 'rxjs/operators';
-import { CommonModule } from '@angular/common'; // Import CommonModule for standalone
+import { CommonModule } from '@angular/common';
+import {GoogleMapsModule} from '@angular/google-maps';
 
 @Component({
   selector: 'app-activity-details',
   standalone: true,
-  imports: [CommonModule], // Needed for *ngIf, *ngFor, async pipe etc.
+  imports: [
+    CommonModule,
+    GoogleMapsModule,
+  ],
   templateUrl: './activity-details.component.html',
   styleUrls: ['./activity-details.component.css']
 })
-export class ActivityDetailsComponent implements OnInit, OnDestroy {
+export class ActivityDetailsComponent implements OnInit{
 
   placeDetails$: Observable<any>; // Observable to hold place details
   isLoading = false;
   errorMessage: string | null = null;
 
-  // Keep track of subscription if needed, though async pipe is often better
+  mapOptions: google.maps.MapOptions = { // Sensible defaults
+    center: { lat: 53.3498, lng: -6.2603 }, // Default center (e.g., Dublin)
+    zoom: 14,
+    mapTypeId: 'roadmap', // Standard map type
+    disableDefaultUI: true,
+    zoomControl: true,
+    scrollwheel: false, // Prevent scroll hijacking
+    draggableCursor: 'pointer',
+    clickableIcons: false
+  };
+  mapCenter: google.maps.LatLngLiteral | undefined;
+  markerPosition: google.maps.LatLngLiteral | undefined;
+  markerOptions: google.maps.MarkerOptions = {
+    draggable: false,
+  };
+  mapZoom = 15;
+
+  // Keep track of subscription
   private routeSub: Subscription | null = null;
 
   constructor(
-    private route: ActivatedRoute, // Inject ActivatedRoute to get route params
-    private router: Router,       // Inject Router for potential navigation
-    private placesService: GooglePlacesService // Inject your service
+    private route: ActivatedRoute,
+    private router: Router,
+    private placesService: GooglePlacesService
   ) {
     // Initialize with an observable emitting null
     this.placeDetails$ = of(null);
@@ -34,7 +55,6 @@ export class ActivityDetailsComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.errorMessage = null;
 
-    // Use paramMap observable (preferred way)
     this.placeDetails$ = this.route.paramMap.pipe(
       tap(() => {
         this.isLoading = true; // Set loading true when params change/start
@@ -46,48 +66,41 @@ export class ActivityDetailsComponent implements OnInit, OnDestroy {
           console.error('Place ID not found in route parameters.');
           this.errorMessage = 'Activity ID was not provided.';
           this.isLoading = false;
-          // Navigate back or show error, return an empty/error observable
-          // this.router.navigate(['/activities']); // E
-          // xample navigation back
           return throwError(() => new Error('Place ID is missing'));
         }
         console.log(`Workspaceing details for Place ID: ${placeId}`);
-        // Call the service method
-        return this.placesService.getPlaceDetails(placeId); // This returns Observable<any>
+        return this.placesService.getPlaceDetails(placeId);
       }),
-      tap(details => { // Optional: Log successful fetch
-        console.log("Received place details:", details);
+      tap(details => {
+        console.log("Received place details for map:", details);
+        if (details?.geometry?.location) {
+          const location = {
+            lat: details.geometry.location.lat,
+            lng: details.geometry.location.lng
+          };
+          console.log("Setting map center and marker to:", location);
+          // Update map properties
+          this.mapCenter = location;
+          this.markerPosition = location;
+          this.mapZoom = 16; // Maybe zoom in a bit more
+        } else {
+          console.warn("Place details missing geometry information.");
+        }
       }),
       catchError(error => {
         console.error('Error fetching place details in component:', error);
         this.errorMessage = error.message || 'Failed to load activity details.';
-        // Return an observable emitting null or an empty object on error
         return of(null);
       }),
       finalize(() => {
-        this.isLoading = false; // Ensure loading is set to false when observable completes or errors
+        this.isLoading = false;
         console.log("Place details fetch finalized (completed or errored).");
       })
     );
 
-    /* // Alternative: Snapshot (works only if component is always destroyed/recreated on param change)
-    const placeId = this.route.snapshot.paramMap.get('placeId');
-    if (placeId) {
-        // Call service... (less robust if navigating between details pages)
-    } else {
-        // Handle error
-    }
-    */
   }
 
-  ngOnDestroy(): void {
-    // If you manually subscribed to route.paramMap (not needed with async pipe pattern above)
-    // if (this.routeSub) {
-    //   this.routeSub.unsubscribe();
-    // }
-  }
 
-  // Helper to go back to the list view
   goBack(): void {
     this.router.navigate(['/activity']); // Navigate to the activities list page
   }
