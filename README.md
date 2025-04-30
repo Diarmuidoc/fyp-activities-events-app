@@ -16,7 +16,7 @@ The site is broken up into  many pages:
 
 The app was developed using WebStorm, to run the app, the WebStorm app button will automatically start the server, however to have the activities page run correctly, the backend-proxy must be started "using node server.js". This server runs on localhost:3000 and must run simultaniously to the app.
 
-
+To run the application, a Google Developer API key, Ticketmaster API key, and Firebase API key are all required to go in an enviroment.ts file.
 
 
 
