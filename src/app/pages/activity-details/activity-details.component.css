@@ -1,5 +1,4 @@
-
-/*.details-container { padding: 20px; }*/
+/*.details { padding: 20px; }*/
 /*.loading, .error { margin: 20px 0; padding: 15px; border-radius: 4px; }*/
 /*.loading { background-color: #eef; }*/
 /*.error { background-color: #fdd; color: #800; }*/
@@ -9,21 +8,17 @@
 /*.review hr { border: 0; border-top: 1px solid #eee; margin-top: 10px; }*/
 /*.back-button { margin-top: 20px; padding: 8px 15px; cursor: pointer; }*/
 
-
-/* --- Overall Container --- */
-.details-container {
-  max-width: 900px; /* Limit width for readability */
-  margin: 20px auto; /* Center the container */
+.details {
+  max-width: 900px;
+  margin: 20px auto;
   padding: 25px 30px;
   background-color: #ffffff;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Example font */
   line-height: 1.6;
   color: #333;
 }
 
-/* --- Back Button --- */
 .back-button {
   background-color: #f0f0f0;
   border: 1px solid #ccc;
@@ -33,31 +28,30 @@
   cursor: pointer;
   font-size: 0.9em;
   transition: background-color 0.2s ease;
-  margin-bottom: 20px; /* Space below button */
+  margin-bottom: 20px;
 }
 
 .back-button:hover {
   background-color: #e0e0e0;
 }
 
-/* --- Titles --- */
 .page-title {
   text-align: center;
-  color: #2c3e50; /* Dark blue-grey */
+  color: #2c3e50;
   margin-bottom: 30px;
   font-weight: 600;
 }
 
-.place-name { /* h3 inside basic-info */
-  color: #3498db; /* Blue */
+.place-name {
+  color: #3498db;
   margin-top: 0;
   margin-bottom: 10px;
   font-size: 1.8em;
   font-weight: 700;
 }
 
-h4 { /* Section titles */
-  color: #16a085; /* Teal color */
+h4 {
+  color: #16a085;
   margin-top: 0;
   margin-bottom: 15px;
   padding-bottom: 5px;
@@ -66,23 +60,21 @@ h4 { /* Section titles */
   font-weight: 600;
 }
 
-/* --- General Section Styling --- */
 .section {
   margin-bottom: 30px;
   padding: 20px;
-  background-color: #f9f9f9; /* Slightly off-white background for sections */
+  background-color: #f9f9f9;
   border: 1px solid #eee;
   border-radius: 6px;
 }
 
-/* --- Basic Info Section --- */
 .basic-info p {
   margin: 8px 0;
 }
 
 .basic-info strong {
   color: #555;
-  min-width: 80px; /* Align text slightly */
+  min-width: 80px;
   display: inline-block;
 }
 
@@ -101,7 +93,6 @@ h4 { /* Section titles */
   text-decoration: underline;
 }
 
-/* Basic Star Rating Display */
 .rating {
   margin-bottom: 15px;
   font-size: 1.1em;
@@ -109,12 +100,11 @@ h4 { /* Section titles */
 .stars {
   --percent: calc(var(--rating) / 5 * 100%); /*Shows as an error but works*/
   display: inline-block;
-  font-size: 1.2em; /* Adjust size */
-  font-family: Times; /* Default stars */
+  font-size: 1.2em;
   line-height: 1;
   margin-left: 10px;
   position: relative;
-  top: 2px; /* Align baseline */
+  top: 2px;
 }
 .stars::before {
   content: '★★★★★';
@@ -124,10 +114,8 @@ h4 { /* Section titles */
   -webkit-text-fill-color: transparent;
 }
 
-
-/* --- Opening Hours Section --- */
 .opening-hours .open {
-  color: #27ae60; /* Green for open */
+  color: #27ae60;
   font-weight: bold;
 }
 
@@ -148,10 +136,8 @@ h4 { /* Section titles */
   padding: 4px 0;
 }
 
-/* --- Photos Section --- */
 .photo-gallery {
   display: grid;
-  /* Adjust columns based on screen width */
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 10px;
   margin-top: 15px;
@@ -159,8 +145,8 @@ h4 { /* Section titles */
 
 .photo-gallery img {
   width: 100%;
-  height: 120px; /* Fixed height, adjust as needed */
-  object-fit: cover; /* Crop images nicely */
+  height: 120px;
+  object-fit: cover;
   border-radius: 6px;
   border: 1px solid #ddd;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -168,10 +154,9 @@ h4 { /* Section titles */
 }
 
 .photo-gallery img:hover {
-  transform: scale(1.05); /* Slight zoom on hover */
+  transform: scale(1.05);
 }
 
-/* --- Reviews Section --- */
 .review-card {
   background-color: #ffffff;
   border: 1px solid #e0e0e0;
@@ -193,12 +178,11 @@ h4 { /* Section titles */
   font-weight: 600;
 }
 
-.review-author .stars { /* Adjust star size for reviews */
+.review-author .stars {
   font-size: 1em;
-  margin-left: 0; /* Remove margin if using justify-content */
+  margin-left: 0;
   top: 0;
 }
-
 
 .review-text {
   color: #444;
@@ -210,15 +194,10 @@ h4 { /* Section titles */
 .review-time {
   font-size: 0.85em;
   color: #777;
-  display: block; /* Put time on its own line */
+  display: block;
   text-align: right;
 }
 
-/* Remove hr if using cards */
-/* hr { border: 0; border-top: 1px solid #eee; margin-top: 15px; } */
-
-
-/* --- Error Message --- */
 .error-message {
   background-color: #f8d7da;
   color: #721c24;
@@ -229,7 +208,6 @@ h4 { /* Section titles */
   text-align: center;
 }
 
-/* --- Fallback Message --- */
 .no-details {
   text-align: center;
   color: #777;
@@ -240,7 +218,6 @@ h4 { /* Section titles */
 }
 
 
-/* --- Responsive Adjustments --- */
 @media (max-width: 768px) {
   .details-container {
     margin: 10px;
@@ -260,7 +237,6 @@ h4 { /* Section titles */
   }
 
   .photo-gallery {
-    /* Adjust columns for smaller screens */
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   }
 
@@ -299,7 +275,18 @@ h4 { /* Section titles */
   .review-author {
     flex-direction: column;
     align-items: flex-start;
-    gap: 5px; /* Add gap between name and stars */
+    gap: 5px;
   }
 
+}
+
+.map-section {
+  padding-top: 10px;
+}
+
+google-map {
+  border-radius: 6px;
+  border: 1px solid #eee;
+  display: block;
+  margin-top: 15px;
 }

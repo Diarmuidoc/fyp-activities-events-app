@@ -8,21 +8,20 @@ import {environment} from '../../environments/environment';
   providedIn: 'root'
 })
 export class GooglePlacesService {
-  private proxyUrl = 'http://localhost:3000/places'; // Use the proxy URL
-  private detailsProxyBaseUrl = 'http://localhost:3000/api/place-details'; // Base path for details proxy endpoint
+  private proxyUrl = 'http://localhost:3000/places'; //proxy URL
+  private detailsProxyBaseUrl = 'http://localhost:3000/api/place-details';
 
   constructor(private http: HttpClient) {}
 
   // Function to get the current location using the Geolocation API
   private getCurrentPosition(): Observable<GeolocationPosition> {
     return new Observable(observer => {
-      // Check if Geolocation is supported
+      //Geolocator support
       if (!navigator.geolocation) {
         observer.error('Geolocation is not supported by this browser.');
         return;
       }
 
-      // Get current position
       navigator.geolocation.getCurrentPosition(
         (position) => {
           console.log('[GooglePlacesService] Geolocation successful:', position.coords);
@@ -30,7 +29,6 @@ export class GooglePlacesService {
           observer.complete();    // Signal successful completion
         },
         (error) => {
-          // Handle different geolocation errors
           let message = 'An unknown error occurred while getting location.';
           switch (error.code) {
             case error.PERMISSION_DENIED:
@@ -44,73 +42,63 @@ export class GooglePlacesService {
               break;
           }
           console.error('[GooglePlacesService] Geolocation error:', message, error);
-          observer.error(new Error(message)); // Emit a standard Error object for consistency
+          observer.error(new Error(message));
         },
-        { // Optional: Geolocation options
+        { //Geolocator options
           enableHighAccuracy: true,
           timeout: 10000, // 10 seconds
-          maximumAge: 0 // Force fresh location check
+          maximumAge: 0
         }
       );
     });
   }
 
 
-  //Details page
   getPlaceDetails(placeId: string): Observable<any> {
     if (!placeId) {
-      // Return an observable that emits an error immediately
       return throwError(() => new Error('Place ID is required to fetch details.'));
     }
 
-    const url = `${this.detailsProxyBaseUrl}/${placeId}`; // Construct the full URL
+    const url = `${this.detailsProxyBaseUrl}/${placeId}`;
 
     console.log(`[GooglePlacesService] Calling proxy for details: ${url}`);
 
-    // Make the GET request to your details proxy endpoint
     return this.http.get<any>(url).pipe(
       tap(response => console.log('[GooglePlacesService] Received details response from proxy:', response)),
       map(response => {
-        // Assuming proxy sends back { result: placeDetails, status: 'OK' }
-        // Extract the main 'result' object
         if (response && response.status === 'OK') {
-          return response.result; // Return just the place details object
+          return response.result;
         } else {
-          // Handle cases where proxy might return error status differently
           throw new Error(response.details || `Failed to get place details: Status ${response.status}`);
         }
       }),
-      catchError(this.handleError) // Use a shared or specific error handler
+      catchError(this.handleError)
     );
   }
 
-  // --- Shared Error Handler (Example) ---
   private handleError(error: HttpErrorResponse | Error): Observable<never> {
     let errorMessage = 'An unknown error occurred!';
     if (error instanceof HttpErrorResponse) {
-      // Server-side error
       errorMessage = `Backend error: Code ${error.status}, Message: ${error.message || JSON.stringify(error.error)}`;
       if (error.error && error.error.details) {
         errorMessage += ` Details: ${error.error.details}`;
       }
     } else {
-      { // Client-side error or error thrown from service/map operator
+      {
         errorMessage = error.message;
       }
     }
     console.error('[GooglePlacesService] Error:', errorMessage);
-    return throwError(() => new Error(errorMessage)); // Return as observable error
+    return throwError(() => new Error(errorMessage));
   }
 
-  // Method to get places based on current location
+
   getPlacesNearby(radius: number = 5000, type: string = 'restaurant'): Observable<any> {
-    // 1. Get the current position
     return this.getCurrentPosition().pipe(
-      // 2. Once position is received, switch to making the HTTP call
       switchMap(position => {
         const { latitude, longitude } = position.coords;
 
-        // 3. Prepare query parameters for the backend proxy
+        //parameters for the backend proxy
         let params = new HttpParams()
           .set('lat', latitude.toString())
           .set('lng', longitude.toString())
@@ -119,13 +107,12 @@ export class GooglePlacesService {
 
         console.log(`[GooglePlacesService] Calling proxy: ${this.proxyUrl} with params:`, params.toString());
 
-        console.log(`Workspaceing places for lat: ${latitude}, lng: ${longitude}`); // For debugging
+        console.log(`Workspaceing places for lat: ${latitude}, lng: ${longitude}`);
 
-        // 4. Make the GET request to your backend proxy
+        //GET request to backend proxy
         return this.http.get<any>(this.proxyUrl, { params });
       }),
 
-      // 5. Handle potential errors (both geolocation and HTTP)
       catchError(error => {
         console.error('Error fetching places:', error);
         let errorMessage = 'Could not fetch places.';
@@ -145,9 +132,8 @@ export class GooglePlacesService {
               break;
           }
         } else if (typeof error === 'string') {
-          errorMessage = error; // Handle the 'Geolocation not supported' case
+          errorMessage = error;
         }
-        // Re-throw the error or return a user-friendly error observable
         return throwError(() => new Error(errorMessage));
       })
     );

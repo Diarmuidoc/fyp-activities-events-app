@@ -27,7 +27,7 @@ export class AuthenticationService {
   }
 
   constructor(private auth: Auth) {
-    this.user$ = user(auth); // Observes the authenticated user
+    this.user$ = user(auth);
   }
 
   login(email: string, password: string): Observable<void>{

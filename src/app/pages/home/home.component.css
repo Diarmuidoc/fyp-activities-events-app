@@ -1,5 +1,3 @@
-
-
 nav {
   background-color: #007bff;
   padding: 10px;
@@ -31,6 +29,50 @@ nav ul li a:hover {
   align-items: center;
   height: 100vh;
   text-align: center;
+}
+
+.map{
+  padding: 50px;
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: center;
+}
+
+mat-card-content {
+  flex-grow: 1;
+  padding: 16px;
+}
+
+mat-card-title{
+  padding-top: 15px;
+  padding-bottom: 5px;
+}
+
+.home-card{
+  width: 300px;
+}
+
+img {
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  width: 100%;
+  display: block;
+  padding: 5px;
+}
+
+@media (max-width: 720px) {
+  .event-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .event-card {
+    width: 100%;
+    max-width: 350px;
+  }
 }
 
 /*.map{*/

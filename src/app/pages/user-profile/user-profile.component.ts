@@ -1,14 +1,14 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { Auth, User, signOut, authState } from '@angular/fire/auth'; // Import necessary auth functions/types
+import { Auth, User, signOut, authState } from '@angular/fire/auth';
 import {Router, RouterLink} from '@angular/router';
-import { Observable, of } from 'rxjs'; // Import Observable and of
+import { Observable, of } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import {SavedActivity, UserListService} from '../../services/user-list.service'; // Import CommonModule for standalone
+import {SavedActivity, UserListService} from '../../services/user-list.service';
 
 @Component({
   selector: 'app-user-profile',
   standalone: true,
-  imports: [CommonModule, RouterLink], // Needed for async pipe, ngIf
+  imports: [CommonModule, RouterLink],
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.css']
 })
@@ -17,7 +17,6 @@ export class UserProfileComponent implements OnInit {
   private router: Router = inject(Router);
   private userListService = inject(UserListService);
 
-  // Use authState for reactive user data
   user$: Observable<User | null> = authState(this.auth);
   savedActivities$: Observable<SavedActivity[]>;
 
@@ -29,7 +28,6 @@ export class UserProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Subscribe to list to handle loading state (optional)
     this.savedActivities$.subscribe({
       next: (list) => {
         console.log("Loaded saved activities:", list);
@@ -38,11 +36,9 @@ export class UserProfileComponent implements OnInit {
       error: (err) => {
         console.error("Error loading saved activities:", err);
         this.isLoadingList = false;
-        // Maybe set an error message
       }
     });
 
-    // Existing user loading logic
     this.user$.subscribe(user => {
       this.isLoading = false;
     });
@@ -57,7 +53,6 @@ export class UserProfileComponent implements OnInit {
     try {
       await this.userListService.removeActivity(placeId);
       alert("Activity removed successfully.");
-      // The list will update automatically because savedActivities$ is an observable
     } catch (error) {
       console.error('Error removing activity:', error);
       alert("Failed to remove activity. Please try again.");
@@ -68,11 +63,9 @@ export class UserProfileComponent implements OnInit {
     try {
       await signOut(this.auth);
       console.log('User logged out successfully.');
-      // Redirect to home or login page after logout
-      this.router.navigate(['/']); // Navigate to home page
+      this.router.navigate(['/']);
     } catch (error) {
       console.error('Error logging out:', error);
-      // Handle logout error (e.g., display a message)
     }
   }
 }

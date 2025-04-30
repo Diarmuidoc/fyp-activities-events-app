@@ -1,5 +1,5 @@
 <div class="content">
-  <h1>Welcome to the Activities Page</h1>
+  <h1>Activities</h1>
   <p>Explore local attractions and points of interest.</p>
 
   <section>
@@ -10,6 +10,7 @@
     <div *ngIf="errorMessage" class="error-message">
       Error fetching activities: {{ errorMessage }}
     </div>
+
 
     <div *ngIf="!isLoading && !errorMessage && places.length > 0" class="places-container">
       <mat-card *ngFor="let place of places"
@@ -32,34 +33,13 @@
           <p>Rating: ⭐ {{ place.rating ? place.rating : 'N/A' }}</p>
         </mat-card-content>
         <mat-card-actions>
-          <button mat-button>View Details</button>
+          <button mat-raised-button [routerLink]="['/activity', place.place_id]">View Details</button>
         </mat-card-actions>
         <div class="card-actions" *ngIf="isLoggedIn$ | async">
-          <button (click)="saveActivity(place)" class="save-button" title="Save Activity">
+          <button (click)="saveActivity(place); $event.stopPropagation()" class="save-button" title="Save Activity">
             &#x2764;&#xFE0F; Save </button>
         </div>
       </mat-card>
-
-<!--      <div *ngFor="let place of places"-->
-<!--           class="card"-->
-<!--           [routerLink]="['/activity', place.place_id]"-->
-<!--           style="cursor: pointer;" title="View details for {{ place.name }}"> <img *ngIf="place.photos && place.photos.length > 0"-->
-<!--                                                                                    [src]="place.imageUrl"-->
-<!--                                                                                    alt="Image of {{ place.name }}" />-->
-<!--        <div *ngIf="!place.photos || place.photos.length === 0" class="no-image-placeholder">-->
-<!--          No Image Available-->
-<!--        </div>-->
-
-<!--        <h3>{{ place.name }}</h3>-->
-<!--        <p>{{ place.vicinity || 'Address not available' }}</p>-->
-<!--        <p>Rating: ⭐ {{ place.rating ? place.rating : 'N/A' }}</p>-->
-
-<!--      </div>-->
-  </div>
-
-
-<!--  <div *ngIf="!isLoading && !errorMessage && places.length === 0" class="no-results">-->
-<!--    No activities found nearby. Try adjusting search criteria or location.-->
-<!--  </div>-->
+    </div>
   </section>
 </div>
