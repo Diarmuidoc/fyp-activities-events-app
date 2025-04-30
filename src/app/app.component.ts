@@ -2,9 +2,6 @@ import {AfterViewInit, Component, inject, Inject, OnInit} from '@angular/core';
 import {RouterLink, RouterOutlet} from '@angular/router';
 import {AuthenticationService} from './services/authentication.service';
 
-
-
-
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, RouterLink],
@@ -70,7 +67,7 @@ export class AppComponent implements AfterViewInit, OnInit {
     }
 
     this.map = new google.maps.Map(mapElement, {
-      center: { lat: 40.73061, lng: -73.935242 }, // Default to New York
+      center: { lat: 52.3369, lng: -6.4633 },
       zoom: 10
     });
   }
@@ -88,7 +85,7 @@ export class AppComponent implements AfterViewInit, OnInit {
           },
           (error) => {
             console.error('Error getting location:', error);
-            reject(null); // Or handle the error more specifically
+            reject(null);
           }
         );
       } else {

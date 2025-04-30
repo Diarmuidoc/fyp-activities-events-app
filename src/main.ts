@@ -51,14 +51,7 @@ loadGoogleMapsScript()
 
 bootstrapApplication(AppComponent, appConfig)
   .catch(err => console.error(err));
-// bootstrapApplication(AppComponent, appConfig)
-//   .catch(err => console.error(err));
-//
-//
-// // Can Both of these exist together
-// bootstrapApplication(AppComponent, {
-//   providers: [provideHttpClient()]
-// }).catch(err => console.error(err));
+
 
 
 

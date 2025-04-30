@@ -7,8 +7,6 @@ import {Router, RouterLink} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {AuthenticationService} from '../../services/authentication.service';
 
-
-
 @Component({
   selector: 'app-user-login',
   imports: [
@@ -16,6 +14,7 @@ import {AuthenticationService} from '../../services/authentication.service';
     MatFormField,
     MatInput,
     MatButton,
+    RouterLink,
   ],
   templateUrl: './user-login.component.html',
   styleUrl: './user-login.component.css'

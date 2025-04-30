@@ -87,7 +87,7 @@ mat-card-actions {
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  width: 100%; /* Make button full width of actions area */
+  width: 100%;
 }
 .save-button:hover {
   background-color: #2980b9;

@@ -18,7 +18,7 @@
   </div>
 
   <div *ngIf="!(savedActivities$ | async)?.length && !isLoadingList" class="empty-list">
-    You haven't saved any activities yet. Browse the <a routerLink="/activities">Activities page</a> to add some!
+    You haven't saved any activities yet. Browse the <a routerLink="/activities">Activities page</a> to add some.
   </div>
 
   <div class="saved-list" *ngIf="(savedActivities$ | async) as activities; else listError">

@@ -19,7 +19,7 @@ interface TicketmasterEvent {
       localTime?: string;
     };
   };
-  _embedded?: { // Optional embedded data
+  _embedded?: {
     venues?: { name: string; city?: { name: string }; address?: { line1?: string } }[];
   };
 }
@@ -51,7 +51,7 @@ export class EventComponent implements OnInit {
   events: TicketmasterEvent[] = [];
   isLoading = false;
   error: string | null = null;
-  locationCity: string = 'Detecting Location...'; // Initial message
+  locationCity: string = 'Detecting Location...';
 
   ngOnInit(): void {
     this.getUserLocationAndFetchEvents();
@@ -70,8 +70,8 @@ export class EventComponent implements OnInit {
           this.handleLocationError(error);
         },
         {
-          enableHighAccuracy: true, // Request more accurate location (may take longer)
-          timeout: 5000,           // Timeout if location isn't obtained within 5 seconds
+          enableHighAccuracy: true,
+          timeout: 5000,           // 5 seconds
           maximumAge: 60000        // Don't use cached location older than 60 seconds
         }
       );
@@ -87,17 +87,12 @@ export class EventComponent implements OnInit {
     this.fetchEvents('Wexford'); // Fallback to Wexford
   }
 
-  /**
-   * Fetches events from the Ticketmaster API based on latitude and longitude.
-   * @param latitude The latitude of the location.
-   * @param longitude The longitude of the location.
-   */
   fetchEventsByCoordinates(latitude: number, longitude: number): void {
     const apiKey = environment.ticketmasterKey;
     const url = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=${apiKey}&latlong=${latitude},${longitude}&radius=50&unit=km&sort=date,asc&countryCode=IE`; // Added countryCode
 
     console.log('Fetching events from coordinates:', url);
-    this.locationCity = 'Near Your Location'; // Update location display
+    this.locationCity = 'Near Your Location';
     this.isLoading = true;
     this.error = null;
 
@@ -106,7 +101,7 @@ export class EventComponent implements OnInit {
         this.error = 'Failed to fetch events near your location.';
         console.error('Error fetching events by coordinates:', err);
         this.isLoading = false;
-        return of({ _embedded: { events: [] } } as TicketmasterResponse); // Return an empty events array on error
+        return of({ _embedded: { events: [] } } as TicketmasterResponse); // Return empty events array on error
       })
     ).subscribe({
       next: (response) => {
@@ -120,10 +115,6 @@ export class EventComponent implements OnInit {
     });
   }
 
-  /**
-   * Fetches events from the Ticketmaster API for a given city.
-   * @param city The name of the city to search for events.
-   */
   fetchEvents(city: string): void {
     const apiKey = environment.ticketmasterKey;
     const url = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=${apiKey}&city=${city}&countryCode=IE&sort=date,asc`;
@@ -152,22 +143,19 @@ export class EventComponent implements OnInit {
     });
   }
 
-  // Helper function to get the primary image URL safely
+  //Helper Functions
   getEventImageUrl(event: TicketmasterEvent): string {
     return event.images?.find(img => img.url)?.url || 'https://via.placeholder.com/300x169?text=No+Image'; // Provide a default placeholder
   }
 
-  // Helper function to get venue name safely
   getVenueName(event: TicketmasterEvent): string {
     return event._embedded?.venues?.[0]?.name || 'Venue TBC';
   }
 
-  // Helper function to get event date safely
   getEventDate(event: TicketmasterEvent): string {
     return event.dates?.start?.localDate || 'Date TBC';
   }
 
-  // Helper function to get event time safely
   getEventTime(event: TicketmasterEvent): string {
     // @ts-ignore
     return event.dates?.start?.localTime ? new Date(`1970-01-01T${event.dates.start.localTime}Z`).toLocaleTimeString({}, {hour: '2-digit', minute:'2-digit', hour12: true}) : 'Time TBC';

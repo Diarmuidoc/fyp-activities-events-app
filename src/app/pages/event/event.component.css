@@ -41,7 +41,7 @@ mat-card-content {
 }
 
 mat-card-actions {
-  flex-shrink: 0; /* Prevent actions from shrinking */
+  flex-shrink: 0;
   padding: 8px 16px;
 }
 

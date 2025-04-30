@@ -18,17 +18,17 @@ import {GoogleMapsModule} from '@angular/google-maps';
 })
 export class ActivityDetailsComponent implements OnInit{
 
-  placeDetails$: Observable<any>; // Observable to hold place details
+  placeDetails$: Observable<any>;
   isLoading = false;
   errorMessage: string | null = null;
 
-  mapOptions: google.maps.MapOptions = { // Sensible defaults
-    center: { lat: 53.3498, lng: -6.2603 }, // Default center (e.g., Dublin)
+  mapOptions: google.maps.MapOptions = {
+    center: { lat: 53.3498, lng: -6.2603 },
     zoom: 14,
-    mapTypeId: 'roadmap', // Standard map type
+    mapTypeId: 'roadmap',
     disableDefaultUI: true,
     zoomControl: true,
-    scrollwheel: false, // Prevent scroll hijacking
+    scrollwheel: true,
     draggableCursor: 'pointer',
     clickableIcons: false
   };
@@ -39,7 +39,6 @@ export class ActivityDetailsComponent implements OnInit{
   };
   mapZoom = 15;
 
-  // Keep track of subscription
   private routeSub: Subscription | null = null;
 
   constructor(
@@ -47,7 +46,6 @@ export class ActivityDetailsComponent implements OnInit{
     private router: Router,
     private placesService: GooglePlacesService
   ) {
-    // Initialize with an observable emitting null
     this.placeDetails$ = of(null);
   }
 
@@ -57,11 +55,11 @@ export class ActivityDetailsComponent implements OnInit{
 
     this.placeDetails$ = this.route.paramMap.pipe(
       tap(() => {
-        this.isLoading = true; // Set loading true when params change/start
+        this.isLoading = true;
         this.errorMessage = null;
       }),
       switchMap(params => {
-        const placeId = params.get('placeId'); // Get placeId from route parameters
+        const placeId = params.get('placeId');
         if (!placeId) {
           console.error('Place ID not found in route parameters.');
           this.errorMessage = 'Activity ID was not provided.';
@@ -100,14 +98,12 @@ export class ActivityDetailsComponent implements OnInit{
 
   }
 
-
   goBack(): void {
-    this.router.navigate(['/activity']); // Navigate to the activities list page
+    this.router.navigate(['/activity']);
   }
 
   handleImageError(event: Event, photo: any): void {
     console.error('Failed to load image:', photo.imageUrl, event);
-    // Optionally, set a placeholder image:
     (event.target as HTMLImageElement).src = '/assets/image-placeholder.png';
   }
 }
