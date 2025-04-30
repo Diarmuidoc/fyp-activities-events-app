@@ -23,17 +23,11 @@ export class HomeComponent {
 
 
   navigateToProfile(): void {
-    console.log('User object working');
     this.user$.subscribe(user => {
-      console.log('User object:', user);
       if (user) {
-        console.log('Navigating to /profile');
         this.router.navigate(['/profile']);
-        console.log('Navigation to /profile attempted');
       } else {
-        console.log('Navigating to /login');
-        this.router.navigate(['/login']);
-        console.log('Navigation to /login attempted');
+        this.router.navigate(['/user-login']);
       }
     })
   }
