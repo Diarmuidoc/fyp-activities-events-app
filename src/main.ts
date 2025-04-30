@@ -3,12 +3,12 @@ import { provideRouter, Routes } from '@angular/router';
 import { AppComponent } from './app/app.component';
 import routeConfig from './app/routes'
 import {appConfig} from './app/app.config';
-import {provideHttpClient} from '@angular/common/http';
+
 
 
 (self as any).FIREBASE_APPCHECK_DEBUG_TOKEN = true;
 
-// Function to load Google Maps API script dynamically
+
 function loadGoogleMapsScript(): Promise<void> {
   return new Promise((resolve, reject) => {
     if (document.getElementById('google-maps-script')) {
@@ -28,7 +28,7 @@ function loadGoogleMapsScript(): Promise<void> {
   });
 }
 
-// Get Google Maps API key from app.config.ts
+
 function getGoogleMapsApiKey(): string | undefined {
   const provider = appConfig.providers.find(
     (p: any) => typeof p === 'object' && 'provide' in p && p.provide === 'GOOGLE_MAPS_API_KEY'
@@ -36,7 +36,7 @@ function getGoogleMapsApiKey(): string | undefined {
   return provider && 'useValue' in provider ? provider.useValue : undefined;
 }
 
-// Load Google Maps API before bootstrapping Angular
+
 loadGoogleMapsScript()
   .then(() => {
     bootstrapApplication(AppComponent, {
@@ -52,27 +52,3 @@ loadGoogleMapsScript()
 bootstrapApplication(AppComponent, appConfig)
   .catch(err => console.error(err));
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//
-// import { bootstrapApplication } from '@angular/platform-browser';
-// import { appConfig } from './app/app.config';
-// import { AppComponent } from './app/app.component';
-//
-// bootstrapApplication(AppComponent, appConfig)
-//   .catch((err) => console.error(err));

@@ -78,18 +78,4 @@ export class UserListService {
   }
 
 
-  isActivitySaved(placeId: string): Observable<boolean> {
-    return this.userId$.pipe(
-      switchMap(userId => {
-        if (!userId || !placeId) {
-          return of(false);
-        }
-        const placeDocRef = doc(this.firestore, `userSavedActivities/${userId}/savedPlaces/${placeId}`);
-        return docData(placeDocRef).pipe(
-          map(docSnap => !!docSnap)
-        );
-      })
-    );
-  }
-
 }

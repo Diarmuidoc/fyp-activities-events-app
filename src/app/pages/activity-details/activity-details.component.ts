@@ -39,8 +39,6 @@ export class ActivityDetailsComponent implements OnInit{
   };
   mapZoom = 15;
 
-  private routeSub: Subscription | null = null;
-
   constructor(
     private route: ActivatedRoute,
     private router: Router,

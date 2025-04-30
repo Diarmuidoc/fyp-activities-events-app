@@ -38,7 +38,7 @@ export class ActivityComponent implements OnInit, OnDestroy {
   places: any[] = [];
   isLoading: boolean = false;
   errorMessage: string | null = null;
-  private placesSubscription: Subscription | null = null; // To hold the subscription
+  private placesSubscription: Subscription | null = null;
   private userListService = inject(UserListService);
   private auth = inject(Auth);
   isLoggedIn$: Observable<boolean>;
@@ -48,7 +48,6 @@ export class ActivityComponent implements OnInit, OnDestroy {
 
 
   constructor(private googlePlacesService: GooglePlacesService) {
-    // Constructor is now simpler, just injects the service
     console.log("ActivityComponent initialized");
     this.isLoggedIn$ = authState(this.auth).pipe(map(user => !!user));
   }
@@ -107,21 +106,6 @@ export class ActivityComponent implements OnInit, OnDestroy {
       });
   }
 
-  retryFetch(): void {
-    console.log("Retrying fetch activities...");
-    this.fetchActivities();
-  }
-
-
-  onImageError(event: Event): void {
-    const target = event.target as HTMLImageElement;
-    console.warn('Image failed to load:', target?.src);
-    target.style.display = 'none';
-  }
-
-  isActivityAlreadySaved(placeId: string): boolean {
-    return this.savedActivityIds.has(placeId);
-  }
 
   async saveActivity(place: any): Promise<void> {
     if (!this.auth.currentUser) {
@@ -138,7 +122,7 @@ export class ActivityComponent implements OnInit, OnDestroy {
       place_id: place.place_id,
       name: place.name,
       vicinity: place.vicinity,
-      imageUrl: place.imageUrl || null // Use the imageUrl added by the proxy
+      imageUrl: place.imageUrl || null
     };
 
     try {
